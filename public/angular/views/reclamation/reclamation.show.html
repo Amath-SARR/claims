@@ -1,0 +1,426 @@
+<style>
+    /*==================================================
+  Comment Contents CSS
+  ==================================================*/
+
+    .post-content {
+        background: #f8f8f8;
+        border-radius: 4px;
+        width: 100%;
+        border: 1px solid #f1f2f2;
+        margin-bottom: 20px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .post-content img.post-image,
+    video.post-video,
+    .google-maps {
+        width: 100%;
+        height: auto;
+    }
+
+    .post-content .google-maps .map {
+        height: 300px;
+    }
+
+    .post-content .post-container {
+        padding: 20px;
+    }
+
+    .post-content .post-container .post-detail {
+        margin-left: 65px;
+        position: relative;
+    }
+
+    .post-content .post-container .post-detail .post-text {
+        line-height: 24px;
+        margin: 0;
+    }
+
+    .post-content .post-container .post-detail .reaction {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .post-content .post-container .post-detail .post-comment {
+        display: inline-flex;
+        margin: 10px auto;
+        width: 100%;
+    }
+
+    .post-content .post-container .post-detail .post-comment img.profile-photo-sm {
+        margin-right: 10px;
+    }
+
+    .post-content .post-container .post-detail .post-comment .form-control {
+        height: 30px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        margin: 7px 0;
+        min-width: 0;
+    }
+
+    img.profile-photo-md {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    img.profile-photo-sm {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+    }
+
+    .text-green {
+        color: #8dc63f;
+    }
+
+    .text-red {
+        color: #ef4136;
+    }
+
+    .following {
+        color: #8dc63f;
+        font-size: 12px;
+        margin-left: 20px;
+    }
+
+    .disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .thumb-sm {
+        height: 30px;
+        width: 30px;
+    }
+
+    /*==================================================
+  History Contents CSS
+  ==================================================*/
+
+    .panel-order .row {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .panel-order .row:last-child {
+        border: 0px;
+    }
+
+    .panel-order .row .col-md-1 {
+        text-align: center;
+        padding-top: 15px;
+    }
+
+    .panel-order .row .col-md-1 img {
+        width: 50px;
+        max-height: 50px;
+    }
+
+    .panel-order .row .row {
+        border-bottom: 0;
+    }
+
+    .panel-order .row .col-md-11 {
+        border-left: 1px solid #ccc;
+    }
+
+    .panel-order .row .row .col-md-12 {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .panel-order .row .row .col-md-12:last-child {
+        font-size: 11px;
+        color: #555;
+        background: #efefef;
+    }
+
+    .panel-order .btn-group {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .panel-order .panel-body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .panel-order .panel-deading {
+        margin-bottom: 0;
+    }
+</style>
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body pb-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-white p-2">
+                            <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                            <li class="breadcrumb-item"><a href="/#!/reclamation">Liste des réclamations</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{reclamation.objet}} (<b>{{
+                                    reclamation.number }}</b>)</li>
+                        </ol>
+                    </nav>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row border p-2">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-12">
+                    <h5><b>Contacts du réclameur</b></h5>
+                    <hr>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Email
+                            <a href="mailto:{{ reclamation.email }}">
+                                <span class="badge bg-primary text-white rounded-pill">
+                                    {{reclamation.email }}</span>
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Téléphone
+                            <a href="tel:{{ reclamation.telephone }}">
+                                <span class="badge bg-primary text-white rounded-pill" ng-if="reclamation.telephone">
+                                    {{reclamation.telephone }}
+                                </span>
+                            </a>
+                            <span class="badge bg-info" ng-if="!reclamation.telephone">
+                                Non renseigné
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Identifiant
+                            <span class="badge bg-primary text-white rounded-pill">
+                                {{reclamation.identifiant }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12 mt-3">
+                    <h5><b>Description de la réclamation</b></h5>
+                    <hr>
+                    <p ng-bind-html="reclamation.description"></p>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="commentaire-tab" data-bs-toggle="tab"
+                                data-bs-target="#commentaire" type="button" role="tab" aria-controls="commentaire"
+                                aria-selected="true"><b>Commentaires</b></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="historique-tab" data-bs-toggle="tab"
+                                data-bs-target="#historique" type="button" role="tab" aria-controls="historique"
+                                aria-selected="false"><b>Historique</b></button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="commentaire" role="tabpanel"
+                            aria-labelledby="commentaire-tab">
+                            <form ng-submit="addComment(null)" name="mainCommentForm">
+                                <textarea ng-model="newComment.commentaire" required ng-minlength="2"
+                                    class="form-control" placeholder="Ajouter un commentaire" summernote id="group"
+                                    rows="7"></textarea>
+                                <span style="color: #ef4136;"> Cochez là pour répondre ou notifier au réclameur</span>
+                                <input type="checkbox" ng-model="newComment.forReclameur"
+                                    ng-click="notifierMailReclameur()">
+                                <button type="submit" ng-disabled="mainCommentForm.$invalid"
+                                    class="btn btn-primary float-right mt-3">Envoyer</button>
+                            </form>
+                            <div class="post-content" ng-repeat="comment in reclamation.comments track by comment.id">
+                                <div class="post-container">
+                                    <img ng-src="{{ comment.user.photo_full_path }}" alt="{{ comment.user.name }}"
+                                        class="profile-photo-md pull-left">
+                                    <div class="post-detail">
+                                        <div class="user-info">
+                                            <h6>
+                                                <span class="profile-link">
+                                                    {{comment.user.name}}</span>
+                                                <span class="badge bg-primary">{{ comment.user.poste }}</span>
+                                                <span ng-if="comment.for_reclameur" class="badge bg-primary">Réclameur</span>
+                                            </h6>
+                                            <p class="text-muted">Posté le {{ comment.created_at|date:'dd/MM/yy à HH:mm'
+                                                }}</p>
+                                        </div>
+                                        <div class="line-divider"></div>
+                                        <div class="post-text">
+                                            <p>
+                                            <div ng-bind-html="comment.commentaire"></div>
+                                            <i class="em em-anguished"></i> <i class="em em-anguished"></i> <i
+                                                class="em em-anguished"></i></p>
+                                        </div>
+                                        <div>
+                                            <a class="text-danger"
+                                                ng-click="removeComment(comment)"><strong>Supprimer</strong></a>
+                                            <a ng-click="commentRespondForm(comment.id)"><strong>Répondre</strong></a> <br>
+                                            <form class="d-inline-block d-none" id="respondComment-{{comment.id}}"
+                                                ng-submit="addComment(comment)">
+                                                <div class="post-comment">
+                                                    <img ng-src="{{currentUser.photo_full_path}}" alt="Moi"
+                                                        class="profile-photo-sm">
+                                                    <input id="respondComment"  ng-model="answerComment.commentaire" ng-enter type="text"
+                                                        class="form-control " placeholder="Répondre au commentaire">
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="line-divider"></div>
+                                        <div class="post-comment"
+                                            ng-repeat="subcomment in comment.subs track by subcomment.id">
+                                            <img ng-if="subcomment.user.photo_full_path" ng-src="{{subcomment.user.photo_full_path}}"
+                                                alt="{{ subcomment.user.name }}" class="profile-photo-sm">
+                                            <img ng-if="!subcomment.user.photo_full_path" title="{{ reclamation.email }}"
+                                                src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"
+                                                class="profile-photo-sm" alt="Réclameur">
+                                            <div>
+                                                <a ng-if="!subcomment.user.name" href="mailto:{{ reclamation.email }}" class="profile-link">
+                                                    <span>{{ reclamation.email }}</span>
+                                                </a>
+                                                <a href="" class="profile-link">
+                                                    {{ subcomment.user.name }}
+                                                </a> - {{ subcomment.created_at|date:'dd/MM/yy à HH:mm' }}
+                                                <i class="em em-laughing"></i>
+                                                <br>
+                                                <p ng-bind-html="subcomment.commentaire"></p>
+                                                <a class="text-danger"
+                                                    ng-click="removeComment(subcomment)"><strong>Supprimer</strong></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="historique" role="tabpanel" aria-labelledby="historique-tab">
+                            <link rel="stylesheet" type="text/css"
+                                href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+                            <div class="container bootdey">
+                                <div class="panel panel-default panel-order">
+
+                                    <div class="panel-body">
+                                        <div class="row" ng-if="reclamation.reclamation_states.length == 0">
+                                            <div class="col">
+                                                Aucun historique
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                            ng-repeat="historicReclamationState in reclamation.reclamation_states">
+                                            <div class="col-md-1"><img
+                                                    ng-src="{{historicReclamationState.user.photo_full_path}}"
+                                                    class="media-object img-fluid" /></div>
+                                            <div class="col-md-11">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="pull-right"><label
+                                                                class="label label-danger {{historicReclamationState.state.class}}">{{historicReclamationState.state.nom}}</label>
+                                                        </div>
+                                                        <span><strong>{{historicReclamationState.user.name}}</strong></span><br />a
+                                                        modifié l'état le {{historicReclamationState.created_at | date:
+                                                        'dd/MM/yyyy, HH:mm'}}<br />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            <select ng-show="editSelectedStateEnabled" ng-change="updateSelectedReclamation()"
+                ng-model="reclamation.state_id" class="form-control" name="state_edit_id" id="state_edit_id">
+                <option ng-repeat="state in states" ng-value="state.id">
+                    {{state.nom}}</option>
+            </select>
+            <div ng-click="enableSelectedStateEdit()">
+                <select ng-disabled="!editSelectedStateEnabled" ng-show="!editSelectedStateEnabled" class="form-control"
+                    name="state_edit_id" id="state_edit_id">
+                    <option>
+                        {{reclamation.state.nom}}</option>
+                </select>
+            </div>
+            <ul class="list-group mt-2">
+                <li class="list-group-item">
+                    <strong>Détails</strong>
+                </li>
+                <li class="list-group-item">
+                    <div ng-show="!editSelectedResponsableEnabled" ng-click="enableSelectedResponsableEdit()"
+                        class="w-100 d-flex justify-content-between align-items-center">
+                        Responsable
+                        <span class="badge bg-info" ng-if="!reclamation.user">Non assigné</span>
+                        <div class="nowrap" ng-if="reclamation.user">
+                            <img title="{{ reclamation.user.name }}" ng-src="{{ reclamation.user.photo_full_path }}"
+                                class="rounded-circle thumb-sm d-inline" alt="friend"> <span
+                                ng-click="getResponsablesSelectedReclamtion(reclamation)"
+                                class="badge bg-primary rounded-pill">{{reclamation.user.name}}</span>
+                        </div>
+                    </div>
+                    <select ng-change="updateSelectedReclamation()" ng-model="reclamation.user_id"
+                        ng-show="editSelectedResponsableEnabled" class="form-control" name="user_edit_id"
+                        id="user_edit_id">
+                        <option ng-repeat="reclamationResponsable in reclamationResponsables"
+                            ng-value="reclamationResponsable.id">
+                            {{reclamationResponsable.name}}</option>
+                        <option ng-value="null">Non assigné</option>
+                    </select>
+                    <a style="color: blue;" class="float-end mt-2" ng-click="updateSelectedReclamation(currentUser.id)"
+                        ng-if="!reclamation.user"> Me l'assigner </a>
+                </li>
+                <li class="list-group-item">
+                    <div ng-click="enableSelectedPrioriteEdit()" ng-show="!editSelectedPrioriteEnabled"
+                        class=" d-flex justify-content-between align-items-center">
+                        Priorité
+                        <span class="rounded-pill">
+                            <!-- <i class="{{ reclamation.priorite.icone+' '+reclamation.priorite.class }}"></i> -->
+                            <ng-container ng-if="reclamation.priorite.code == 'HIGH'">
+                                <i class="{{ reclamation.priorite.icone+' '+reclamation.priorite.class }}">
+                                </i>
+                            </ng-container>
+                            <ng-container ng-if="reclamation.priorite.code == 'MEDIUM'">
+                                <i class="{{ reclamation.priorite.icone+' '+reclamation.priorite.class }}">
+                                </i>
+                            </ng-container>
+                            <ng-container ng-if="reclamation.priorite.code == 'LOW'">
+                                <i class="{{ reclamation.priorite.icone+' '+reclamation.priorite.class }}">
+                                </i>
+                            </ng-container>
+                            {{ reclamation.priorite.nom }}
+                        </span>
+                    </div>
+                    <select ng-change="updateSelectedReclamation()" ng-model="reclamation.priorite_id"
+                        ng-show="editSelectedPrioriteEnabled" class="form-control" name="priorite_edit_id"
+                        id="priorite_edit_id">
+                        <option ng-repeat="priorite in priorites" ng-value="priorite.id">
+                            {{ priorite.nom }}
+                        </option>
+                    </select>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Application
+                    <span title="{{ reclamation.categorie_reclamation.application.nom }}"
+                        class="badge bg-primary rounded-pill">
+                        {{ reclamation.categorie_reclamation.application.code }}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a ng-if="!reclamation.archivee" ng-click="archiver()" class="mx-auto d-block">Archiver</a>
+                    <a ng-if="reclamation.archivee" class="disabled mx-auto d-block">Archivée <i class="fa fa-archive"
+                            aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

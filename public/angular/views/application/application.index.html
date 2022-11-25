@@ -1,0 +1,145 @@
+<div class="card">
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Liste des applications</li>
+            </ol>
+        </nav>
+        <hr>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Applications</h3>
+        <h4 class="card-text">Liste des applications...</h4>
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-8">
+                <button ng-if="currentUser.is_admin" ng-click="index()" type="button" class="btn btn-dark"><i
+                        class="fas fa-sync fa-sm fa-fw"></i></button>
+                <!-- Button trigger modal -->
+                <button ng-if="currentUser.is_admin" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modelId">
+                    Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+                </button>
+            </div>
+        </div>
+        <input id="logoInputEdit" hidden accept="image/*" type="file" name="logo">
+        <div style="overflow-x:scroll;">
+            <table datatable="ng" class="table table-bordered table-hover table-responsive-sm nowrap">
+                <thead class="bg-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Code</th>
+                        <th>Nom</th>
+                        <th>Presentation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="application in applications|filter:applicationSearchField">
+                        <td scope="row">
+                            <img ng-click="selectLogoEdit(application)" ng-src="{{application.logo_full_path}}" style="height: 60px; object-fit: contain; cursor: pointer;" alt="logo" class="img-fluid rounded-circle" />
+                        </td>
+                        <td>{{application.code}}</td>
+                        <td><a href="#!/application/{{application.id}}">{{ application.nom }}</a></td>
+                        <td style="white-space: pre-wrap;">{{ application.presentation }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="#!/application/{{application.id}}" role="button">
+                                <i class="fas fa-regular fa-eye fa-sm fa-fw"></i>
+                            </a>
+                            <button ng-if="currentUser.is_admin" ng-click="openEditModal(application)" type="button" class="btn btn-warning"><i
+                                class="fas fa-edit fa-sm fa-fw"></i></button>
+                            <button ng-if="currentUser.is_admin" ng-click="destroy(application)" type="button" class="btn btn-danger"><i
+                                class="fas fa-trash fa-sm fa-fw"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Button trigger modal -->
+        <button ng-if="currentUser.is_admin" type="button" class="btn btn-primary btn-md float-right" data-bs-toggle="modal" data-bs-target="#modelId" style="margin-bottom: 60px;">
+            Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouvelle application</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="store()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom *</label>
+                        <input ng-class="{'is-invalid':creationErrors.nom}" ng-model="newApplication.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  creationErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code *</label>
+                        <input ng-class="{'is-invalid':creationErrors.code}" ng-model="newApplication.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  creationErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="logo" class="form-label">Logo</label>
+                        <input id="logoInput" accept="image/*" ng-class="{'is-invalid':creationErrors.logo}" type="file" name="logo" id="logo" class="form-control" aria-describedby="logoHelpId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="presentation" class="form-label">Présentation *</label>
+                        <textarea ng-class="{'is-invalid':creationErrors.presentation}" ng-model="newApplication.presentation" name="presentation" id="presentation" class="form-control" aria-describedby="presentationHelpId"></textarea>
+                        <small ng-repeat-start="error in  creationErrors.presentation" id="presentationHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit Modal -->
+<div class="modal fade" id="applicationEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modification application</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="update()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input ng-class="{'is-invalid':editionErrors.nom}" ng-model="selectedApplication.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  editionErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code</label>
+                        <input ng-class="{'is-invalid':editionErrors.code}" ng-model="selectedApplication.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="presentation" class="form-label">Présentation</label>
+                        <textarea ng-class="{'is-invalid':editionErrors.presentation}" ng-model="selectedApplication.presentation" name="presentation" id="presentation" class="form-control" aria-describedby="presentationHelpId"></textarea>
+                        <small ng-repeat-start="error in  editionErrors.presentation" id="presentationHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-warning">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

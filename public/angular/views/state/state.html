@@ -1,0 +1,150 @@
+<div class="card">
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Liste des states</li>
+            </ol>
+        </nav>
+        <hr>
+    </div>
+</div>
+<div class="card mb-5">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-10">
+                <h4 class="card-title">Gestion des states des reclamations</h4>
+                <p class="card-text">Gérez la liste des états par lesquels les reclamations vont transiter...</p>
+            </div><br/>
+        </div><br/>
+        <hr>
+        <div class="row">
+            <div class="col-10 col-md-7">
+                <input class="form-control" type="text" placeholder="Rechercher des states" ng-model="searchStates" />
+                <br /><br />
+            </div>
+            <div class="col-2 col-md-5">
+                <button ng-click="index()" type="button" class="btn btn-outline-dark"><i
+                        class="fas fa-sync fa-sm fa-fw"></i></button>
+            </div>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="table table-bordered table-hover table-responsive-sm nowrap">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>Ordre</th>
+                        <th>Code</th>
+                        <th>Nom</th>
+                        <th>Class</th>
+                        <th ng-if="currentUser.is_admin">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="state in states | filter:searchStates">
+                        <td scope="row">{{state.ordre}}</td>
+                        <td>{{state.code}}</td>
+                        <td>{{ state.nom }}</td>
+                        <td>{{ state.class }} <span class="{{state.class}}">badge</span> </td>
+                        <td ng-if="currentUser.is_admin">
+                            <button ng-click="openEditModal(state)" type="button" class="btn btn-warning"><i
+                                class="fas fa-edit fa-sm fa-fw"></i></button>
+                            <button ng-click="destroy(state)" type="button" class="btn btn-danger"><i
+                                class="fas fa-trash fa-sm fa-fw"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Button trigger modal -->
+        <button ng-if="currentUser.is_admin" type="button" class="btn btn-primary btn-md float-right" data-bs-toggle="modal" data-bs-target="#modelId">
+            Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouveau state</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="store()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom *</label>
+                        <input ng-class="{'is-invalid':creationErrors.nom}" ng-model="newState.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  creationErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code *</label>
+                        <input ng-class="{'is-invalid':creationErrors.code}" ng-model="newState.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  creationErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ordre" class="form-label">Ordre *</label>
+                        <input ng-class="{'is-invalid':creationErrors.ordre}" ng-model="newState.ordre" type="number" name="ordre" id="ordre" class="form-control" placeholder="Ordre" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  creationErrors.ordre" id="ordreHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="class" class="form-label">Class *</label>
+                        <input ng-class="{'is-invalid':creationErrors.class}" ng-model="newState.class" type="text" name="class" id="class" class="form-control" placeholder="Classe css" aria-describedby="classHelpId">
+                        <small ng-repeat-start="error in  creationErrors.class" id="classHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit Modal -->
+<div class="modal fade" id="stateEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modification state</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="update()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input ng-class="{'is-invalid':editionErrors.nom}" ng-model="selectedState.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  editionErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code</label>
+                        <input ng-class="{'is-invalid':editionErrors.code}" ng-model="selectedState.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ordre" class="form-label">Ordre</label>
+                        <input ng-class="{'is-invalid':editionErrors.ordre}" ng-model="selectedState.ordre" type="number" name="ordre" id="ordre" class="form-control" placeholder="Ordre" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.ordre" id="ordreHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="class" class="form-label">Class *</label>
+                        <input ng-class="{'is-invalid':editionErrors.class}" ng-model="selectedState.class" type="text" name="class" id="class" class="form-control" placeholder="Classe css" aria-describedby="classHelpId">
+                        <small ng-repeat-start="error in  editionErrors.class" id="classHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-warning">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

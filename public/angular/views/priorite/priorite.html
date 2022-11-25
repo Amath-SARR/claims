@@ -1,0 +1,162 @@
+<div class="card">
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Liste des priorités</li>
+            </ol>
+        </nav>
+        <hr>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-10">
+                <h4 class="card-title">Gestion des priorités des reclamations</h4>
+                <p class="card-text">Gérez la liste des priorités qu'a chaque réclamation...</p>
+            </div>
+        </div><br />
+        <hr>
+        <div class="row">
+            <div class="col-9">
+                <input class="form-control" type="text" placeholder="Rechercher des priorités" ng-model="searchPriorites" />
+                <br /><br />
+            </div>
+            <div class="col-3">
+                <button ng-click="index()" type="button" class="btn btn-dark"><i
+                        class="fas fa-sync fa-sm fa-fw"></i></button>
+            </div>
+        </div>
+        <div style="overflow-x:scroll;">
+            <table class="table table-bordered table-hover table-responsive-sm nowrap">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>Icone</th>
+                        <th>Nom</th>
+                        <th>Code</th>
+                        <th>Level</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="priorite in priorites | filter:searchPriorites">
+                        <td scope="row" class="{{priorite.class}} d-flex justify-content-center"><i ng-class="{'{{priorite.icone}}' : true}"></i></td>
+                        <td>{{priorite.nom}}</td>
+                        <td>{{ priorite.code }}</td>
+                        <td>{{ priorite.level }}</td>
+                        <td>
+                            <button ng-if="currentUser.is_admin" ng-click="openEditModal(priorite)" type="button" class="btn btn-warning"><i
+                                class="fas fa-edit fa-sm fa-fw"></i></button>
+                            <button ng-if="currentUser.is_admin" ng-click="destroy(priorite)" type="button" class="btn btn-danger"><i
+                                class="fas fa-trash fa-sm fa-fw"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Button trigger modal -->
+        <button ng-if="currentUser.is_admin" type="button" class="btn btn-primary btn-md float-right" data-bs-toggle="modal" data-bs-target="#modelId">
+            Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouvelle Priorité</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="store()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom *</label>
+                        <input ng-class="{'is-invalid':creationErrors.nom}" ng-model="newPriorite.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  creationErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code *</label>
+                        <input ng-class="{'is-invalid':creationErrors.code}" ng-model="newPriorite.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  creationErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="icone" class="form-label">Icone *</label>
+                        <input ng-class="{'is-invalid':creationErrors.icone}" ng-model="newPriorite.icone" type="text" name="icone" id="icone" class="form-control" placeholder="Icone" aria-describedby="iconeHelpId">
+                        <small ng-repeat-start="error in  creationErrors.icone" id="iconeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="class" class="form-label">Class *</label>
+                        <input ng-class="{'is-invalid':creationErrors.class}" ng-model="newPriorite.class" type="text" name="class" id="class" class="form-control" placeholder="Class" aria-describedby="classHelpId">
+                        <small ng-repeat-start="error in  creationErrors.class" id="classHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="level" class="form-label">Level *</label>
+                        <input ng-class="{'is-invalid':creationErrors.level}" ng-model="newPriorite.level" type="number" name="level" id="icone" class="form-control" placeholder="Level" aria-describedby="levelHelpId">
+                        <small ng-repeat-start="error in  creationErrors.level" id="levelHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit Modal -->
+<div class="modal fade" id="prioriteEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modification Priorité</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="update()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input ng-class="{'is-invalid':editionErrors.nom}" ng-model="selectedPriorite.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  editionErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code *</label>
+                        <input ng-class="{'is-invalid':editionErrors.code}" ng-model="selectedPriorite.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="icone" class="form-label">Icone *</label>
+                        <input ng-class="{'is-invalid':editionErrors.icone}" ng-model="selectedPriorite.icone" type="text" name="icone" id="icone" class="form-control" placeholder="Icone" aria-describedby="iconeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.icone" id="iconeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="class" class="form-label">Class *</label>
+                        <input ng-class="{'is-invalid':creationErrors.class}" ng-model="selectedPriorite.class" type="text" name="class" id="class" class="form-control" placeholder="Class" aria-describedby="classHelpId">
+                        <small ng-repeat-start="error in  creationErrors.class" id="classHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="level" class="form-label">Level *</label>
+                        <input ng-class="{'is-invalid':creationErrors.level}" ng-model="selectedPriorite.level" type="number" name="level" id="icone" class="form-control" placeholder="Level" aria-describedby="levelHelpId">
+                        <small ng-repeat-start="error in  creationErrors.level" id="levelHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-warning">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

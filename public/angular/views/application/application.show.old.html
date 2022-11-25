@@ -1,0 +1,70 @@
+<div class="tab-pane fade" id="usersList" role="tabpanel" aria-labelledby="users-list-tab">
+    <div class="row mt-1">
+        <div class="col-md-6">
+            <div class="card border">
+                <div class="card-body">
+                    <h4 class="card-title">Utilisateurs non autorisés</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12" data-drop="true" jqyoui-droppable data-jqyoui-options
+                            ng-model="users">
+                            <div data-drag="true" jqyoui-draggable="{animate:true,index:user.id}" data-jqyoui-options
+                                class="card border mb-3" ng-repeat="user in users"
+                                ng-hide="(application.users|map:'id')|contains:user.id" ng-model="user">
+                                <div class="row g-0" ng-show="user.id">
+                                    <div class="col-md-2">
+                                        <img style="height: 120px; object-fit: contain;"
+                                            ng-src="{{user.photo_full_path}}"
+                                            class="img-fluid rounded-start" alt="user_photo">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{user.name}}</h5>
+                                            <p class="card-text">{{user.email}}</p>
+                                            <p class="card-text">
+                                                <small class="text-muted">{{user.type}}</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border">
+                <div class="card-body">
+                    <h4 class="card-title">Utilisateurs autorisés</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12" data-drop="true" jqyoui-droppable="{onDrop: 'addIntervenant'}" data-jqyoui-options
+                            ng-model="application.users">
+                            <div data-drag="true" jqyoui-draggable="{animate:true,index:user.id}" data-jqyoui-options
+                                class="card border mb-3" ng-repeat="user in application.users"
+                                ng-model="user">
+                                <div class="row g-0" ng-show="user.id">
+                                    <div class="col-md-2">
+                                        <img style="height: 120px; object-fit: contain;"
+                                            ng-src="{{user.photo_full_path}}"
+                                            class="img-fluid rounded-start" alt="user_photo">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{user.name}}</h5>
+                                            <p class="card-text">{{user.email}}</p>
+                                            <p class="card-text">
+                                                <small class="text-muted">{{user.type}}</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+.nowrap {
+    white-space: nowrap;
+}
+.float-right {
+    float: right;
+}
+.ml--5 {
+    margin-left: -5px;
+}

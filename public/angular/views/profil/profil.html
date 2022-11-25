@@ -1,0 +1,154 @@
+<div class="card">
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Liste des profils</li>
+            </ol>
+        </nav>
+        <hr>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-9">
+                <h4 class="card-title">Gestion des profils</h4>
+                <p class="card-text">Gérez la liste des profils pour catégoriser les applications...</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-9">
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-model="searchField" placeholder="Rechercher...">
+                </div>
+            </div>
+            <div class="col-3">
+                <button ng-click="index()" type="button" class="btn btn-dark"> <i
+                    class="fas fa-sync fa-sm fa-fw"></i></button>
+            </div>
+        </div>
+        <div style="overflow:auto;">
+            <table class="table table-bordered table-hover table-responsive-sm nowrap">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>Ordre</th>
+                        <th>Code</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="profil in profils|filter:searchField">
+                        <td scope="row">{{profil.ordre}}</td>
+                        <td>{{profil.code}}</td>
+                        <td><a href="#!/profil/{{profil.id}}">{{ profil.nom }}</a></td>
+                        <td>{{ profil.description }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="#!/profil/{{profil.id}}" role="button">
+                                <i class="fas fa-regular fa-eye fa-sm fa-fw"></i>
+                            </a>
+                            <button ng-if="currentUser.is_admin" ng-click="openEditModal(profil)" type="button" class="btn btn-warning"><i
+                            class="fas fa-edit fa-sm fa-fw"></i></button>
+                            <button ng-if="currentUser.is_admin" ng-click="destroy(profil)" type="button" class="btn btn-danger"><i
+                            class="fas fa-trash fa-sm fa-fw"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Button trigger modal -->
+        <button ng-if="currentUser.is_admin" type="button"  class="btn btn-primary btn-md float-right" data-bs-toggle="modal" data-bs-target="#modelId">
+            Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouveau profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="store()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom *</label>
+                        <input ng-class="{'is-invalid':creationErrors.nom}" ng-model="newProfil.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  creationErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code *</label>
+                        <input ng-class="{'is-invalid':creationErrors.code}" ng-model="newProfil.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  creationErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ordre" class="form-label">Ordre *</label>
+                        <input ng-class="{'is-invalid':creationErrors.ordre}" ng-model="newProfil.ordre" type="number" name="ordre" id="ordre" class="form-control" placeholder="Ordre" aria-describedby="ordreHelpId">
+                        <small ng-repeat-start="error in  creationErrors.ordre" id="ordreHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description *</label>
+                        <textarea ng-class="{'is-invalid':creationErrors.description}" ng-model="newProfil.description" name="description" id="description" class="form-control" aria-describedby="descriptionHelpId"></textarea>
+                        <small ng-repeat-start="error in  creationErrors.description" id="descriptionHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit Modal -->
+<div class="modal fade" id="profilEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modification profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="update()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input ng-class="{'is-invalid':editionErrors.nom}" ng-model="selectedProfil.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  editionErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code</label>
+                        <input ng-class="{'is-invalid':editionErrors.code}" ng-model="selectedProfil.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ordre" class="form-label">Ordre</label>
+                        <input ng-class="{'is-invalid':editionErrors.ordre}" ng-model="selectedProfil.ordre" type="number" name="ordre" id="ordre" class="form-control" placeholder="Ordre" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.ordre" id="ordreHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea ng-class="{'is-invalid':editionErrors.description}" ng-model="selectedProfil.description" name="description" id="description" class="form-control" aria-describedby="descriptionHelpId"></textarea>
+                        <small ng-repeat-start="error in  editionErrors.description" id="descriptionHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-warning">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,275 @@
+<style>
+    .mask-custom {
+        /* background: rgba(24, 24, 16, .2); */
+        border-bottom-left-radius: 2em;
+        border-bottom-right-radius: 2em;
+        backdrop-filter: blur(25px);
+        border: 2px solid rgba(255, 255, 255, 0.05);
+        background-clip: padding-box;
+        box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+    }
+
+    .thumb-sm {
+        height: 20px;
+        width: 20px;
+    }
+
+    .float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 70px;
+        right: 40px;
+        background-color: #92a46e;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        box-shadow: 2px 2px 3px #999;
+    }
+
+    .my-float {
+        margin-top: 22px;
+    }
+</style>
+<section class="gradient-custom-2 mb-5">
+    <div class="container-fluid pb-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb bg-white p-2">
+                                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Liste des réclamations</li>
+                            </ol>
+                        </nav>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" ng-if="reclamations.length>0">
+                            <div class="col-lg-3 col-md-12">
+                                <!--<label for="searchReclamation" class="form-label">Rechercher</label>-->
+                                <input ng-model="reclamationSearchField" type="text" class="form-control"
+                                    name="searchReclamation" id="searchReclamation"
+                                    aria-describedby="searchReclamationHelpId" placeholder="Rechercher">
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div ng-click="getAuthUserApplications()">
+                                    <select ng-change="handleAppliationAndStateSelection()"
+                                        ng-model="selectedApplicationId" class="form-control form-control-sm"
+                                        name="application_id" id="application_id">
+                                        <option ng-value="0">Toutes les applications</option>
+                                        <option ng-repeat="application in applications" ng-value="application.id">
+                                            {{application.nom }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div ng-click="getAllStates()">
+                                    <select ng-change="handleAppliationAndStateSelection()" ng-model="selectedStateId"
+                                        class="form-control form-control-sm" name="statut_id" id="statut_id">
+                                        <option ng-value="0">Tous les statuts</option>
+                                        <option ng-repeat="state in states" ng-value="state.id">{{ state.nom }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <button ng-click="changePageSize(refreshReclamationList)" type="button"
+                                    class="btn btn-outline-dark">
+                                    <i class="fas fa-sync-alt fa-sm fa-fw"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="reclamations.length == 0" ng-include="'angular/templates/empty.html'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-1">
+                <div class="list-group">
+                    <a ng-repeat="reclamation in reclamations|filter:reclamationSearchField"
+                        class="list-group-item list-group-item-action">
+                        <div class="row" ng-click="open(reclamation)">
+                            <div class="col-md-8 col-sm-12">
+                                <img title="{{ reclamation.categorie_reclamation.application.code }}"
+                                    src="{{ reclamation.categorie_reclamation.application.logo_full_path }}"
+                                    class="rounded-circle thumb-sm d-inline-block" alt="friend">
+                                {{reclamation.objet|truncate:65:'...'}}
+                                - <small class="h6">{{reclamation.categorie_reclamation.application.nom}}</small>
+                            </div>
+                            <div class="col-md-2 col-sm-12" style="margin: 2px 0px 2px 0px;">
+                                <span class="{{reclamation.state.class}}">
+                                    {{reclamation.state.nom}}
+                                </span>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <span>{{ reclamation.number }}</span>
+                                <img ng-if="!reclamation.user" title="Non assignée"
+                                    src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"
+                                    class="rounded-circle thumb-sm d-inline-block" alt="friend">
+                                <img ng-if="reclamation.user" title="{{ reclamation.user.name }}"
+                                    src="{{ reclamation.user.photo_full_path }}"
+                                    class="rounded-circle thumb-sm d-inline-block" alt="friend">
+                                <span class="{{reclamation.priorite.class}}"><i
+                                        ng-class="{'{{reclamation.priorite.icone}}' : true}"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 mt-2 d-flex justify-content-center">
+                <nav aria-label="Page navigation example " ng-if="pagesNumber> 1">
+                    <ul class="pagination">
+                        <li ng-style="{ 'cursor' : (paginationData.prev_page_url != null) ? 'pointer' : 'not-allowed' }"
+                            class="page-item" ng-class="{disabled: paginationData.prev_page_url == null}">
+                            <div class="page-link"
+                                ng-click="goPreviousOrFollowingPage(paginationData.current_page - 1)">Précédent</div>
+                        </li>
+                        <li style="cursor: pointer;" ng-repeat="x in [].constructor(pagesNumber) track by $index"
+                            class="page-item" ng-class="{active: paginationData.current_page==($index+1)}">
+                            <div class="page-link" ng-click="changePagination($index+1)">{{$index + 1}}</div>
+                        </li>
+                        <li ng-style="{ 'cursor' : (paginationData.next_page_url != null) ? 'pointer' : 'not-allowed' }"
+                            class="page-item" ng-class="{disabled: paginationData.next_page_url == null}">
+                            <div class="page-link"
+                                ng-click="goPreviousOrFollowingPage(paginationData.current_page + 1)">Suivant</div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <footer>
+                <!-- Bouton Ouvrant Modal New Reclamation-->
+                <a class="float" data-bs-toggle="modal" data-bs-target="#reclamationNewModalIndex">
+                    <i class="fa fa-plus my-float"></i>
+                </a>
+            </footer>
+
+            <!-- Modal New Reclamation-->
+            <div class="modal fade bd-example-modal-lg" id="reclamationNewModalIndex" tabindex="-1" role="dialog"
+                aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><b>Nouvelle Réclamation</b></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form ng-submit="store()">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Application *</label>
+                                            <select ng-model="newReclamation.application" class="form-control"
+                                                ng-change="selectApplication(newReclamation.application)">
+                                                <option ng-value="">Sélectionner l'application</option>
+                                                <option
+                                                    ng-repeat="connectedUserApplication in connectedUserApplications"
+                                                    ng-value="connectedUserApplication">{{
+                                                    connectedUserApplication.nom }}</option>
+                                            </select>
+                                            <small ng-repeat-start="error in  creationErrors.application"
+                                                id="applicationHelpId" class="text-danger fw-normal">- {{error}}</small>
+                                            <br ng-repeat-end="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="categorie_reclamation_id" class="form-label">Catégorie de la
+                                                réclamation *</label>
+                                            <select ng-change="selectCategorieReclamation($event)"
+                                                ng-model="newReclamation.categorie_reclamation_id" class="form-control"
+                                                name="categorie_reclamation_id" id="categorie_reclamation_id">
+                                                <option ng-value="">Sélectionner le catégorie de la
+                                                    réclamation</option>
+                                                <option
+                                                    ng-if="categorieReclamation.application_id==selectedApplication.id"
+                                                    ng-repeat="categorieReclamation in categoriesReclamations"
+                                                    ng-value="categorieReclamation.id">{{categorieReclamation.nom}}
+                                                </option>
+                                            </select>
+                                            <small ng-repeat-start="error in  creationErrors.categorie_reclamation_id"
+                                                class="text-danger fw-normal">- {{error}}</small>
+                                            <br ng-repeat-end="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3" ng-show="selectedCategorieReclamation.nom=='Autre'">
+                                    <label for="objet" class="form-label">Objet réclamation *</label>
+                                    <input ng-model="newReclamation.objet" type="text" class="form-control h-100"
+                                        name="objet" id="objet" aria-describedby="objetHelpId"
+                                        placeholder="Préciser l'objet de la réclamation">
+                                    <small id="objetHelpId" class="form-text text-muted">Saisir l'objet de la
+                                        réclamation</small> <br>
+                                    <small ng-repeat-start="error in  creationErrors.objet"
+                                        class="text-danger fw-normal">-
+                                        {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="identifiant" class="form-label">Matricule *</label>
+                                    <input type="text" ng-model="newReclamation.identifiant" class="form-control"
+                                        name="identifiant" id="identifiant" aria-describedby="identifiantHelpId"
+                                        placeholder="Matricule">
+                                    <small id="identifiantHelpId" class="form-text text-muted">Saisir votre
+                                        identifiant</small><br>
+                                    <small ng-repeat-start="error in  creationErrors.identifiant"
+                                        class="text-danger fw-normal">-
+                                        {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description *</label>
+                                    <textarea ng-model="newReclamation.description" summernote class="form-control"
+                                        name="description" id="description" rows="5"></textarea>
+                                    <small ng-repeat-start="error in  creationErrors.description"
+                                        class="text-danger fw-normal">-
+                                        {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email *</label>
+                                            <input ng-model="newReclamation.email" type="email" class="form-control"
+                                                name="email" id="email" aria-describedby="emailHelpId"
+                                                placeholder="Email">
+                                            <small id="emailHelpId" class="form-text text-muted">Préciser une adresse
+                                                email valide et joignable pour suivre la réclamation.</small> <br>
+                                            <small ng-repeat-start="error in  creationErrors.email"
+                                                class="text-danger fw-normal">-
+                                                {{error}}</small>
+                                            <br ng-repeat-end="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="telephone" class="form-label">Téléphone</label>
+                                            <input ng-model="newReclamation.telephone" type="tel" class="form-control"
+                                                name="telephone" id="telephone" aria-describedby="telephoneHelpId"
+                                                placeholder="Téléphone">
+                                            <small id="telephoneHelpId" class="form-text text-muted">Préciser votre
+                                                numéro pour
+                                                vous rappeler au besoin</small><br>
+                                            <small ng-repeat-start="error in  creationErrors.telephone"
+                                                class="text-danger fw-normal">-
+                                                {{error}}</small>
+                                            <br ng-repeat-end="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button class="btn btn-primary">Enregistrer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>

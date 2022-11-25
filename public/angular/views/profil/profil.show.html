@@ -1,0 +1,77 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                        <li class="breadcrumb-item"><a href="#!/profil">Liste des profils</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{profil.nom}}</li>
+                    </ol>
+                </nav>
+            </div>
+            <hr><br>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5 ">
+        <div class="card border">
+            <div class="card-body">
+                <div>
+                    <h2>Profils <br>
+                        <span
+                            style="font-family: 'Times New Roman', Times, serif; font-size: 100%;"><b>{{profil.nom}}</b></span>
+                    </h2><br>
+                </div>
+                <span class="badge rounded-pill bg-primary text-dark display-4">{{profil.code}}</span>
+                <div ng-click="show()" class="btn btn-dark btn-md me-2">
+                    <i class="fas fa-sync-alt fa-sm fa-fw"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7 ps-md-4 ">
+        <div class="card border">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between border-bottom">
+                    <p class="py-2">Nom</p>
+                    <p class="py-2 text-muted">{{ profil.nom }}</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between border-bottom">
+                    <p class="py-2">Code</p>
+                    <p class="py-2 text-muted">{{profil.code }}</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between border-bottom">
+                    <p class="py-2 text-muted"><b>Description:</b> {{profil.description }}</p>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="list-group">
+                            <li class="list-group-item bg-primary text-white">
+                                Applications concernées
+                            </li>
+                            <li ng-repeat="applicationProfil in profil.application_profils track by applicationProfil.id"
+                                class="list-group-item d-flex justify-content-between align-items-center">
+                                {{applicationProfil.application.nom}}
+                                <span ng-if="currentUser.is_admin" ng-click="destroyApplicationProfil(applicationProfil)" class="text-danger">
+                                    <i class="fas fa-trash-alt fa-lg fa-fw"></i>
+                                </span>
+                            </li>
+                            <li class="list-group-item" ng-repeat="application in applications track by application.id"
+                                ng-if="!((profil.application_profils|map:'application_id')|contains:application.id) && currentUser.is_admin">
+                                <span  ng-click="linkProfilToApplication(application)" class="text-primary">
+                                    <i class="fas fa-plus-circle fa-lg fa-fw"></i>
+                                </span>
+                                {{application.nom}} ({{ application.code }})
+                            </li>
+                            <button ng-if="currentUser.is_admin" type="button" ng-click="destroyApplicationProfil(applicationProfil)" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modelId">
+                                supprimer <i class="fas fas fa-trash fa-sm fa-fw"></i>
+                            </button>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

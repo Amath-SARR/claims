@@ -1,0 +1,217 @@
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap);
+    body {
+        background: #f5f5f5;
+    }
+
+    @media only screen and (max-width: 767px) {
+        .hide-on-mobile {
+            display: none;
+        }
+    }
+
+    .login-box {
+        background: url(https://i.imgur.com/73BxBuI.png);
+        background-size: cover;
+        background-position: center;
+        padding: 50px;
+        margin: 50px auto;
+        min-height: 700px;
+        -webkit-box-shadow: 0 2px 60px -5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 60px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        font-family: "Script MT";
+        font-size: 54px;
+        text-align: center;
+        color: #888888;
+        margin-bottom: 50px;
+    }
+
+    .logo .logo-font {
+        color: #91A36E;
+    }
+
+    @media only screen and (max-width: 767px) {
+        .logo {
+            font-size: 34px;
+        }
+    }
+
+    .header-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .login-form {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .login-form .form-control {
+        border-radius: 0;
+        margin-bottom: 30px;
+    }
+
+    .login-form .form-group {
+        position: relative;
+    }
+
+    .login-form .form-group .forgot-password {
+        position: absolute;
+        top: 6px;
+        right: 15px;
+    }
+
+    .login-form .btn {
+        border-radius: 0;
+        -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .login-form .btn.btn-primary {
+        background: #91A36E;
+        border-color: #31c0ff;
+    }
+
+    .slider-feature-card {
+        background: #fff;
+        max-width: 280px;
+        margin: 0 auto;
+        padding: 30px;
+        text-align: center;
+        -webkit-box-shadow: 0 2px 25px -3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 25px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .slider-feature-card img {
+        height: 80px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .slider-feature-card h3,
+    .slider-feature-card p {
+        margin-bottom: 30px;
+    }
+
+    .carousel-indicators {
+        bottom: -50px;
+    }
+
+    .carousel-indicators li {
+        cursor: pointer;
+    }
+
+    .reset {
+        color: #869764;
+    }
+
+    .reset:hover {
+        cursor: pointer;
+        background-color: #91A36E;
+        color: white;
+        border-radius: 1.5px;
+        transition: all 0.5s;
+    }
+</style>
+<section class="body">
+    <div class="container">
+        <div class="login-box">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="logo">
+                        <span class="logo-font">UIDT</span>Support
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <br>
+                    <h3 class="header-title">Connexion</h3>
+                    <form class="login-form" ng-submit="login()">
+                        <div class="form-group">
+                            <input ng-model="loginModel.email" type="email" class="form-control" placeholder="Email">
+                            <small ng-repeat-start="error in  loginErrors.email" id="emailHelpId" class="text-danger fw-normal">- {{error}}</small>
+                            <br ng-repeat-end="">
+                        </div>
+                        <div class="form-group">
+                            <input ng-model="loginModel.password" type="password" class="form-control" placeholder="Mot de passe" autocomplete="off">
+                            <small ng-repeat-start="error in  loginErrors.password" id="passwordHelpId" class="text-danger fw-normal">- {{error}}</small>
+                            <br ng-repeat-end="">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+                        </div>
+                        <div class="form-group">
+                            <div class="text-center">Mot de passe oublié ? <span class="reset" data-bs-toggle="modal" data-bs-target="#checkEmailAdressModal">Réinitialiser</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6 hide-on-mobile">
+                    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                        <!-- Indicators -->
+                        <ul class="carousel-indicators">
+                            <li data-bs-target="#demo" data-bs-slide-to="0" class="active"></li>
+                            <li data-bs-target="#demo" data-bs-slide-to="1"></li>
+                        </ul>
+                        <!-- The slideshow -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="slider-feature-card">
+                                    <img src="https://i.imgur.com/YMn8Xo1.png" alt="">
+                                    <h3 class="slider-title">Title Here</h3>
+                                    <p class="slider-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, odio!</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="slider-feature-card">
+                                    <img src="https://i.imgur.com/Yi5KXKM.png" alt="">
+                                    <h3 class="slider-title">Title Here</h3>
+                                    <p class="slider-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, debitis?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="checkEmailAdressModal" tabindex="-1" aria-labelledby="ModalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="ModalTitleId">Veuillez saisir votre adresse email
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form name="checkEmail" ng-submit="checkEmailAdress()">
+                    <div class="modal-body">
+                        <input ng-model="emailAdress" ng-class="{'is-invalid':emailAdress.length !=0 && checkEmail.emailAdress.$invalid, 'is-valid':checkEmail.emailAdress.$valid}" class="
+                            form-control" placeholder="alioune@univ-thies.sn" name="emailAdress" type="email" ng-required="true">
+                        <small ng-if="(checkEmail.emailAdress.$invalid && emailAdress.length!=0) || emailAdressErrors.length >= 1" class="text-danger">Veuillez
+                            saisir une adresse email valide</small>
+                        <!-- <small ng-repeat-start="error in  emailAdressErrors" id="emailHelpId"
+                            class="text-danger fw-normal">- {{error}}</small> -->
+                        {{emailAdressErrors.length}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" style="margin: 0;" ng-disabled="checkEmail.emailAdress.$invalid" class="btn btn-primary btn-block">Valider</button>
+                        <ng-container ng-if="isCheckingEmailAdress">
+                            <div class="spinner-border" style="color: #92a46e;" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

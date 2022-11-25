@@ -1,0 +1,211 @@
+<style>
+    /*==================================================
+  Comment Contents CSS
+  ==================================================*/
+
+    .post-content {
+        background: #f8f8f8;
+        border-radius: 4px;
+        width: 100%;
+        border: 1px solid #f1f2f2;
+        margin-bottom: 20px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .post-content img.post-image,
+    video.post-video,
+    .google-maps {
+        width: 100%;
+        height: auto;
+    }
+
+    .post-content .google-maps .map {
+        height: 300px;
+    }
+
+    .post-content .post-container {
+        padding: 20px;
+    }
+
+    .post-content .post-container .post-detail {
+        margin-left: 65px;
+        position: relative;
+    }
+
+    .post-content .post-container .post-detail .post-text {
+        line-height: 24px;
+        margin: 0;
+    }
+
+    .post-content .post-container .post-detail .reaction {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .post-content .post-container .post-detail .post-comment {
+        display: inline-flex;
+        margin: 10px auto;
+        width: 100%;
+    }
+
+    .post-content .post-container .post-detail .post-comment img.profile-photo-sm {
+        margin-right: 10px;
+    }
+
+    .post-content .post-container .post-detail .post-comment .form-control {
+        height: 30px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        margin: 7px 0;
+        min-width: 0;
+    }
+
+    img.profile-photo-md {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    img.profile-photo-sm {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+    }
+
+    .text-green {
+        color: #8dc63f;
+    }
+
+    .text-red {
+        color: #ef4136;
+    }
+
+    .following {
+        color: #8dc63f;
+        font-size: 12px;
+        margin-left: 20px;
+    }
+
+    .disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .thumb-sm {
+        height: 30px;
+        width: 30px;
+    }
+
+    /*==================================================
+  History Contents CSS
+  ==================================================*/
+
+    .panel-order .row {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .panel-order .row:last-child {
+        border: 0px;
+    }
+
+    .panel-order .row .col-md-1 {
+        text-align: center;
+        padding-top: 15px;
+    }
+
+    .panel-order .row .col-md-1 img {
+        width: 50px;
+        max-height: 50px;
+    }
+
+    .panel-order .row .row {
+        border-bottom: 0;
+    }
+
+    .panel-order .row .col-md-11 {
+        border-left: 1px solid #ccc;
+    }
+
+    .panel-order .row .row .col-md-12 {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .panel-order .row .row .col-md-12:last-child {
+        font-size: 11px;
+        color: #555;
+        background: #efefef;
+    }
+
+    .panel-order .btn-group {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .panel-order .panel-body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .panel-order .panel-deading {
+        margin-bottom: 0;
+    }
+</style>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body pb-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-white p-2">
+                            <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                         </ol>
+                    </nav>
+                    <hr>
+                    <div>
+                        Bonjour, <br>
+                        Pouvez-vous nous expliquer comment votre éeclamation n'est pas gérée correctement? <br>
+                         Merci d'être précis dans la réponse. <br>
+                    </div> <br> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row border p-2"> -->
+        <div class="col-md-8">
+            <div class="row">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="commentaire" role="tabpanel"
+                        aria-labelledby="commentaire-tab">
+                        <form ng-submit="addComment(newComment)" name="mainCommentForm">
+                            <textarea ng-model="newComment.commentaire" required ng-minlength="2"
+                                class="form-control" placeholder="Ecrivez ici votre réponse" summernote id="group"
+                                rows="7"></textarea>
+                            <button type="submit" ng-disabled="mainCommentForm.$invalid"
+                                class="btn btn-primary float-right mt-3">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <h5><b>Des détails de votre réclamation</b></h5>
+                    <hr>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Objet
+                            <span class="badge bg-primary text-white rounded-pill">
+                                {{reclamation.objet}}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12 mt-3">
+                    <h5><b>Description de la réclamation</b></h5>
+                    <hr>
+                    <p ng-bind-html="reclamation.description"></p>
+                </div>
+            </div>
+        </div>
+    <!-- </div> -->
+</div>

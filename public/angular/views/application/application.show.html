@@ -1,0 +1,343 @@
+<div class="card">
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="#!/application">Liste des applications</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ application.nom }}</li>
+            </ol>
+        </nav>
+        <hr>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <ul class="nav nav-tabs mt-2" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="home" aria-selected="true"><b>Détails</b></button>
+            </li>
+            <li ng-click="findAllUsers()" class="nav-item" role="presentation">
+                <button class="nav-link" id="users-list-tab" data-bs-toggle="tab" data-bs-target="#usersList" type="button" role="tab" aria-controls="usersList" aria-selected="false"><b>Liste des
+                        utilisateurs</b></button>
+            </li>
+            <li ng-click="findAllProfils()" class="nav-item" role="presentation">
+                <button class="nav-link" id="profils-list-tab" data-bs-toggle="tab" data-bs-target="#profilsList" type="button" role="tab" aria-controls="profilsList" aria-selected="false"><b>Liste des
+                        profils</b></button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="categories-list-tab" data-bs-toggle="tab" data-bs-target="#categoriesList" type="button" role="tab" aria-controls="categoriesList" aria-selected="false"><b>Catégories de
+                        réclamation</b></button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <div class="mt-5">
+                            <h1>Application <br>
+                                <span style="font-family: 'Times New Roman', Times, serif; font-size: 150%;"><b>{{application.nom}}</b></span>
+                            </h1>
+                        </div>
+                        <div class="mt-5">
+                            <span class="badge rounded-pill bg-info text-dark display-4">{{application.code}}</span>
+                            <button ng-if="currentUser.is_admin" ng-click="openEditModal()" type="button" class="btn btn-warning"><i
+                                    class="fas fa-edit fa-sm fa-fw"></i></button>
+                            <button ng-if="currentUser.is_admin" ng-click="destroyApplication()" type="button" class="btn btn-danger">
+                                <i class="fas fa-trash fa-sm fa-fw"></i></button>
+                            <div ng-if="currentUser.is_admin" ng-click="show()" class="btn btn-dark btn-md me-2">
+                                <i class="fas fa-sync-alt fa-sm fa-fw"></i>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <div class="accordion mt-5" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            <h4><b>Présentation <i class="fa fa-clipboard" aria-hidden="true"></i></b>
+                                            </h4>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <strong>{{application.presentation}}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="media mt-3">
+                            <div class="media-right">
+                                <input id="logoInputEdit" hidden accept="image/*" type="file" name="logo">
+                                <img class="media-object img-fluid" ng-click="selectLogoEdit(application)" ng-src="{{application.logo_full_path}}" alt="logo" style="width: 560px; height: 350px; display: inline-block;" title="Mettre à jour le logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="usersList" role="tabpanel" aria-labelledby="users-list-tab">
+                <div class="row mt-1">
+                    <div class="col-md-12">
+                        <div class="card border">
+                            <div class="card-body">
+                                <h4 class="card-title">Utilisateurs autorisés</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <div angucomplete-alt id="searchUserToAdd" placeholder="Ajouter un intervenant" maxlength="20" pause="100" selected-object="selectedUserToAddAsIntervenant" local-data="users" search-fields="name" title-field="name" minlength="1" input-class="form-control form-control-small"
+                                                match-class="highlight" clear-selected="true">
+                                            </div>
+                                            <small ng-repeat-start="error in  intervenantCreationErrors.application_id" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                                            <br ng-repeat-end="">
+                                            <small ng-repeat-start="error in  intervenantCreationErrors.user_id" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                                            <br ng-repeat-end="">
+                                        </div>
+                                    </div>
+                                    <div ng-if="application.intervenants.length != 0" class="col-md-6" ng-repeat="intervenant in application.intervenants">
+                                        <div class="card border mb-3">
+                                            <div class="row g-0">
+                                                <div class="col-md-3">
+                                                    <img style="max-height: 100px; object-fit: contain;" ng-src="{{ intervenant.user.photo_full_path }}" class="img-fluid rounded-start" alt="...">
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{ intervenant.user.name }}</h5>
+                                                        <p class="card-text">{{ intervenant.user.poste }}</p>
+                                                        <p class="card-text"><small class="text-muted">
+                                                            {{ intervenant.user.type }}</small></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2" ng-if="currentUser.is_admin">
+                                                    <button ng-click="destroyIntervenant(intervenant)" type="button" class="btn btn-danger btn-sm d-inline mr-1">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-if="application.intervenants.length == 0" class="col-md-12" ng-include="'angular/templates/empty.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profilsList" role="tabpanel" aria-labelledby="profils-list-tab">
+                <div class="card border">
+                    <div class="card-body">
+                        <h4 class="card-title">Profils autorisés</h4>
+                        <p class="card-text">Liste des profils autorisés sur cette application</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-group">
+                                    <a class="list-group-item list-group-item-action bg-primary text-white" aria-current="true">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">Liste des profils autorisés</h5>
+                                        </div>
+                                    </a>
+                                    <li ng-if="application.application_profils.length != 0" ng-repeat="applicationProfil in application.application_profils track by applicationProfil.id" class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{applicationProfil.profil.nom}}
+                                        <button ng-if="currentUser.is_admin" ng-click="destroyApplicationProfil(applicationProfil)" type="button" class="btn btn-danger">
+                                            <i class="fas fa-trash-alt fa-sm fa-fw"></i>
+                                        </button>
+                                    </li>
+                                    <li class="list-group-item" ng-repeat="profil in profils track by profil.id" ng-hide="((application.application_profils|map:'profil_id')|contains:profil.id) || !currentUser.is_admin">
+                                        <!-- <input ng-click="linkProfilToApplication(profil)" class="form-check-input me-1"
+                                            type="checkbox" value="" aria-label="{{ profil.nom }}"> -->
+                                        <a ng-if="currentUser.is_admin" ng-click="linkProfilToApplication(profil)"> <i class="fas fa-plus-square fa-fw" aria-hidden="true" style="border-radius: 20%; color: #92a46e;"></i></a>&nbsp;{{profil.nom}}
+                                    </li>
+                                    <div ng-if="application.application_profils.length == 0" ng-include="'angular/templates/empty.html'"></div>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="categoriesList" role="tabpanel" aria-labelledby="categories-list-tab">
+                <!-- categorie application -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="card-title">Categories Réclamation</h4>
+                                <p class="card-text">Liste des categories réclamation...</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-2" ng-if="application.categorie_reclamations.length != 0" ng-repeat="categorieReclamation in application.categorie_reclamations">
+                                <div class="card border">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <h3 class="card-title">{{ categorieReclamation.nom }}</h3>
+                                                <hr>
+                                                <strong>Description</strong>
+                                                <p class="card-text" ng-bind-html="categorieReclamation.description">
+                                                </p>
+                                                <hr>
+                                                <strong>Guide</strong>
+                                                <p class="card-text" ng-bind-html="categorieReclamation.guide"></p>
+                                            </div>
+                                            <div class="col-2" ng-if="currentUser.is_admin">
+                                                <button ng-click="openCategorieReclamationEditModal(categorieReclamation)" type="button" class="btn btn-warning"><i
+                                                        class="fas fa-edit fa-sm fa-fw"></i></button>
+                                                <button ng-click="destroyCategorieReclamation(categorieReclamation)" type="button" class="btn btn-danger"><i
+                                                        class="fas fa-trash fa-sm fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <img ng-repeat="gestionnaire in categorieReclamation.gestionnaires track by gestionnaire.id" style="width: 50px;" ng-src="{{gestionnaire.user.photo_full_path}}" class="rounded-circle d-inline" ng-class="{'ml--5': $index>0}" ng-dblclick="destroyGestionnaire(gestionnaire)"
+                                                    alt="{{gestionnaire.user.name}}" title="{{gestionnaire.user.name}}">
+                                                <button ng-click="categorieReclamation.showAddGestionnaire=!categorieReclamation.showAddGestionnaire" type="button" style="margin-left: 0px;" class="btn btn-outline-secondary d-inline">
+                                                    <i class="fas fa-lg fa-fw"
+                                                        ng-class="{'fa-times':categorieReclamation.showAddGestionnaire,'fa-plus-square': !categorieReclamation.showAddGestionnaire}"></i>
+                                                </button>
+                                                <select id="newGestionnaireSelectField" ng-change="addNewGestionnaire(categorieReclamation)" class="form-control" ng-show="categorieReclamation.showAddGestionnaire" ui-select2 ng-model="selectedUserToAddAsGestionnaire.id" data-placeholder="Ajouter un gestionnaire">
+                                                    <option value=""></option>
+                                                    <option ng-repeat="user in application.users" value="{{user.id}}">
+                                                        {{user.name}}</option>
+                                                </select>
+                                                <small ng-show="categorieReclamation.showAddGestionnaire" ng-repeat-start="error in  gestionnaireCreationErrors.categorie_reclamation_id" id="gestionnaireNewFieldHelp" class="text-danger fw-normal">-
+                                                    {{error}}</small>
+                                                <br ng-repeat-end="">
+                                                <small ng-show="categorieReclamation.showAddGestionnaire" ng-repeat-start="error in  gestionnaireCreationErrors.user_id" id="gestionnaireNewFieldhelp" class="text-danger fw-normal">-
+                                                    {{error}}</small>
+                                                <br ng-repeat-end="">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-4" ng-if="application.categorie_reclamations.length == 0" ng-include="'angular/templates/empty.html'"></div>
+                        </div>
+                        <!-- Button trigger modal -->
+                        <button ng-if="currentUser.is_admin" type="button" class="btn btn-primary btn-md float-right" data-bs-toggle="modal" data-bs-target="#categorieReclamationNewModalId">
+                            Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal new Categorie reclamation-->
+<div class="modal fade" id="categorieReclamationNewModalId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouvelle catégorie réclamation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="storeCategorieReclamation()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input ng-class="{'is-invalid':categorieReclamationCreationErrors.nom}" ng-model="newCategorieReclamation.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  categorieReclamationCreationErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea summernote config="summerNoteOptions" ng-class="{'is-invalid':categorieReclamationCreationErrors.description}" ng-model="newCategorieReclamation.description" name="description" id="description" class="form-control" aria-describedby="descriptionHelpId"></textarea>
+                        <small ng-repeat-start="error in  categorieReclamationCreationErrors.description" id="descriptionHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="guide" class="form-label">Guide</label>
+                        <textarea summernote config="summerNoteOptions" ng-class="{'is-invalid':categorieReclamationCreationErrors.guide}" ng-model="newCategorieReclamation.guide" name="guide" id="guide" class="form-control" aria-describedby="guideHelpId"></textarea>
+                        <small ng-repeat-start="error in  categorieReclamationCreationErrors.guide" id="guidenHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit categorie réclamation Modal -->
+<div class="modal fade" id="categorieReclamationEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modification application</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="updateCategorieReclamation()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input ng-class="{'is-invalid':categorieReclamationEditionErrors.nom}" ng-model="selectedCategorieReclamation.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  categorieReclamationEditionErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea summernote config="summerNoteOptions" ng-class="{'is-invalid':categorieReclamationEditionErrors.description}" ng-model="selectedCategorieReclamation.description" name="description" id="description" class="form-control" aria-describedby="descriptionHelpId"></textarea>
+                        <small ng-repeat-start="error in  categorieReclamationEditionErrors.description" id="descriptionHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="guide" class="form-label">Guide</label>
+                        <textarea summernote config="summerNoteOptions" ng-class="{'is-invalid':categorieReclamationEditionErrors.guide}" ng-model="selectedCategorieReclamation.guide" name="guide" id="guide" class="form-control" aria-describedby="guideHelpId"></textarea>
+                        <small ng-repeat-start="error in  categorieReclamationEditionErrors.guide" id="guidenHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-warning">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Edit Modal -->
+<div class="modal fade" id="applicationEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modification application</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="update()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input ng-class="{'is-invalid':editionErrors.nom}" ng-model="application.nom" type="text" name="nom" id="nom" class="form-control" placeholder="Nom" aria-describedby="nomHelpId">
+                        <small ng-repeat-start="error in  editionErrors.nom" id="nomHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code</label>
+                        <input ng-class="{'is-invalid':editionErrors.code}" ng-model="application.code" type="text" name="code" id="code" class="form-control" placeholder="Code" aria-describedby="codeHelpId">
+                        <small ng-repeat-start="error in  editionErrors.code" id="codeHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="presentation" class="form-label">Présentation</label>
+                        <textarea ng-class="{'is-invalid':editionErrors.presentation}" ng-model="application.presentation" name="presentation" id="presentation" class="form-control" aria-describedby="presentationHelpId" rows="5"></textarea>
+                        <small ng-repeat-start="error in  editionErrors.presentation" id="presentationHelpId" class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-warning">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

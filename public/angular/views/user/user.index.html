@@ -1,0 +1,209 @@
+<div class="card">
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Liste des utilisateurs</li>
+            </ol>
+        </nav>
+        <hr>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-10">
+                <h4 class="card-title">Utilisateurs</h4>
+                <h5 class="card-text">Liste des users...</h5>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-lg-5 mt-3">
+
+                </div>
+                <div class="col-lg-7 mt-3">
+                    <button ng-click="index()" type="button" class="btn btn-dark d-inline"><i
+                            class="fas fa-sync fa-sm fa-fw"></i></button>
+                    <!-- Button trigger modal -->
+                    <button ng-if="currentUser.is_admin" type="button" class="btn btn-primary btn-md d-inline" data-bs-toggle="modal"
+                        data-bs-target="#modelId">
+                        Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <input id="photoInputEdit" hidden accept="image/*" type="file" name="photo">
+        <div class="table-responsive-xxl">
+            <table datatable="ng" class="table table-bordered table-hover nowrap">
+                <thead class="">
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Poste</th>
+                        <th>Type</th>
+                        <th>Activé</th>
+                        <th>Dernière connexion</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in users|filter:searchField">
+                        <td scope="row">
+                            <img ng-click="selectPhotoEdit(user)" ng-src="{{user.photo_full_path}}" class="img-fluid" style="width: 60px; object-fit: contain; cursor: pointer;" alt="photo">
+                        </td>
+                        <td><a href="#!/user/{{user.id}}">{{ user.name }}</a></td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.poste}}</td>
+                        <td>
+                            <span ng-if="user.type == 'Administrateur'" class="badge rounded-pill bg-warning text-dark ">{{user.type}}</span>
+                            <span ng-if="user.type != 'Administrateur'" class="badge rounded-pill bg-info text-dark">{{user.type}}</span>
+                        </td>
+                        <td>
+                            <input bs-switch ng-model="user.enabled" type="checkbox" switch-size="sm" switch-label="{{ user.enabled?'Désactiver':'Activer' }}" switch-on-text="Activé" switch-off-text="Bloqué" switch-on-color="primary" switch-off-color="danger" switch-radio-off="true"
+                                switch-label-width="sm" ng-change="swicthUserEnablement(user)" ng-true-value="1" ng-false-value="0">
+                            <!-- <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="flexSwitchCheckDefault" ng-click="swicthUserEnablement(user)" aria-label="{{user.enabled}}"
+                                    ng-checked="user.enabled">
+                            </div> -->
+                        </td>
+                        <td>{{user.last_login_at_format | date : "dd/MM/y à HH:mm:ss"}}</td>
+                        <td>
+                            <a class="btn btn-primary" href="#!/user/{{user.id}}" role="button">
+                                <i class="fas fa-regular fa-eye fa-sm fa-fw"></i>
+                            </a>
+                            <button ng-if="currentUser.is_admin" ng-click="openEditModal(user)" type="button" class="btn btn-warning"><i
+                                    class="fas fa-edit fa-sm fa-fw"></i></button>
+                            <button ng-if="currentUser.is_admin" ng-click="destroy(user)" type="button" class="btn btn-danger"><i
+                                    class="fas fa-trash fa-sm fa-fw"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Button trigger modal -->
+        <button  ng-if="currentUser.is_admin" type="button" class="btn btn-primary btn-md float-right" data-bs-toggle="modal"
+            data-bs-target="#modelId">
+            Ajouter <i class="fas fa-plus-circle fa-sm fa-fw"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouvel user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="store()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom *</label>
+                        <input ng-class="{'is-invalid':creationErrors.name}" ng-model="newUser.name" type="text"
+                            name="name" id="name" class="form-control" placeholder="Nom" aria-describedby="nameHelpId">
+                        <small ng-repeat-start="error in  creationErrors.name" id="nameHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email *</label>
+                        <input ng-class="{'is-invalid':creationErrors.email}" ng-model="newUser.email" type="text"
+                            name="email" id="email" class="form-control" placeholder="Email"
+                            aria-describedby="emailHelpId">
+                        <small ng-repeat-start="error in  creationErrors.email" id="emailHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="poste" class="form-label">Poste *</label>
+                        <input ng-class="{'is-invalid':creationErrors.poste}" ng-model="newUser.poste" type="text"
+                            name="poste" id="poste" class="form-control" placeholder="Poste"
+                            aria-describedby="posteHelpId">
+                        <small ng-repeat-start="error in  creationErrors.poste" id="posteHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Photo</label>
+                        <input id="photoInput" accept="image/*" ng-class="{'is-invalid':creationErrors.photo}"
+                            type="file" name="photo" id="photo" class="form-control" aria-describedby="photoHelpId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Type *</label>
+
+                        <select class="form-control" ng-model="newUser.type">
+                            <option ng-value="">Sélectionner un profil</option>
+                            <option ng-repeat="type in types" ng-value="type.label" >{{ type.label }}</option>
+                        </select>
+                        <small ng-repeat-start="error in  creationErrors.type" id="typeHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit Modal -->
+<div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modification user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="update()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom *</label>
+                        <input ng-class="{'is-invalid':editionErrors.name}" ng-model="selectedUser.name" type="text"
+                            name="name" id="name" class="form-control" placeholder="Nom" aria-describedby="nameHelpId">
+                        <small ng-repeat-start="error in  editionErrors.name" id="nameHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email *</label>
+                        <input ng-class="{'is-invalid':editionErrors.email}" ng-model="selectedUser.email" type="text"
+                            name="email" id="email" class="form-control" placeholder="Email"
+                            aria-describedby="emailHelpId">
+                        <small ng-repeat-start="error in  editionErrors.email" id="emailHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="poste" class="form-label">Poste *</label>
+                        <input ng-class="{'is-invalid':editionErrors.poste}" ng-model="selectedUser.poste" type="text"
+                            name="poste" id="poste" class="form-control" placeholder="Poste"
+                            aria-describedby="posteHelpId">
+                        <small ng-repeat-start="error in  editionErrors.poste" id="posteHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Type *</label>
+                        <select ng-model="selectedUser.type" class="form-control" name="type" id="type">
+                            <option ng-repeat="type in types" ng-value="type.code">{{ type.label }}</option>
+                        </select>
+                        <small ng-repeat-start="error in  editionErrors.type" id="typeHelpId"
+                            class="text-danger fw-normal">- {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-warning">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

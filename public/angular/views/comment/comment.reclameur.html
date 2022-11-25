@@ -1,0 +1,314 @@
+<style>
+    /*==================================================
+  Comment Contents CSS
+  ==================================================*/
+
+    .post-content {
+        background: #f8f8f8;
+        border-radius: 4px;
+        width: 100%;
+        border: 1px solid #f1f2f2;
+        margin-bottom: 20px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .post-content img.post-image,
+    video.post-video,
+    .google-maps {
+        width: 100%;
+        height: auto;
+    }
+
+    .post-content .google-maps .map {
+        height: 300px;
+    }
+
+    .post-content .post-container {
+        padding: 20px;
+    }
+
+    .post-content .post-container .post-detail {
+        margin-left: 65px;
+        position: relative;
+    }
+
+    .post-content .post-container .post-detail .post-text {
+        line-height: 24px;
+        margin: 0;
+    }
+
+    .post-content .post-container .post-detail .reaction {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .post-content .post-container .post-detail .post-comment {
+        display: inline-flex;
+        margin: 10px auto;
+        width: 100%;
+    }
+
+    .post-content .post-container .post-detail .post-comment img.profile-photo-sm {
+        margin-right: 10px;
+    }
+
+    .post-content .post-container .post-detail .post-comment .form-control {
+        height: 30px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        margin: 7px 0;
+        min-width: 0;
+    }
+
+    img.profile-photo-md {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    img.profile-photo-sm {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+    }
+
+    .text-green {
+        color: #8dc63f;
+    }
+
+    .text-red {
+        color: #ef4136;
+    }
+
+    .following {
+        color: #8dc63f;
+        font-size: 12px;
+        margin-left: 20px;
+    }
+
+    .disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .thumb-sm {
+        height: 30px;
+        width: 30px;
+    }
+
+    /*==================================================
+  History Contents CSS
+  ==================================================*/
+
+    .panel-order .row {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .panel-order .row:last-child {
+        border: 0px;
+    }
+
+    .panel-order .row .col-md-1 {
+        text-align: center;
+        padding-top: 15px;
+    }
+
+    .panel-order .row .col-md-1 img {
+        width: 50px;
+        max-height: 50px;
+    }
+
+    .panel-order .row .row {
+        border-bottom: 0;
+    }
+
+    .panel-order .row .col-md-11 {
+        border-left: 1px solid #ccc;
+    }
+
+    .panel-order .row .row .col-md-12 {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .panel-order .row .row .col-md-12:last-child {
+        font-size: 11px;
+        color: #555;
+        background: #efefef;
+    }
+
+    .panel-order .btn-group {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .panel-order .panel-body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .panel-order .panel-deading {
+        margin-bottom: 0;
+    }
+
+    .dots {
+        height: 4px;
+        width: 4px;
+        margin-bottom: 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block
+    }
+
+    .badge {
+        padding: 7px;
+        padding-right: 9px;
+        padding-left: 16px;
+        box-shadow: 5px 6px 6px 2px #e9ecef
+    }
+
+    .user-img {
+        margin-top: 4px
+    }
+
+    .check-icon {
+        font-size: 17px;
+        color: #c3bfbf;
+        top: 1px;
+        position: relative;
+        margin-left: 3px
+    }
+
+    .form-check-input {
+        margin-top: 6px;
+        margin-left: -24px !important;
+        cursor: pointer
+    }
+
+    .form-check-input:focus {
+        box-shadow: none
+    }
+
+    .icons i {
+        margin-left: 8px
+    }
+
+    .reply {
+        margin-left: 12px
+    }
+
+    .reply small {
+        color: #b7b4b4
+    }
+
+    .reply small:hover {
+        color: green;
+        cursor: pointer
+    }
+    .card {
+        border: none;
+        box-shadow: #dedfe0;
+        border-radius: 4px
+    }
+</style>
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body pb-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-white p-2">
+                            <li class="breadcrumb-item"><a href="#">Réclamation</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{comment.comment.reclamation.objet}} (<b>{{
+                                comment.comment.reclamation.number }}</b>)</li>
+                        </ol>
+                    </nav>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row border p-2">
+        <div class="col-md-7">
+            <div class="row">
+                <span class="d-flex flex-row d-flex">
+                    <img align-items-center ng-src="{{ comment.comment.user.photo_full_path }}"
+                    class="profile-photo-sm">
+                        <small  style="margin-left: 12px;"  class="align-items-center"><b>{{ comment.comment.user.name }}</b> -
+                        {{ comment.comment.created_at| date: 'dd/MM/yyyy, HH:mm' }}<br>
+                        <span> <i class="fa fa-star text-primary"></i><i class="fa fa-star text-primary"></i>
+                            <i class="fa fa-star text-primary"></i></span></small>
+                </span>
+                <p style="margin-left: 45px;" ng-bind-html="comment.comment.commentaire">{{ comment.comment.commentaire }}</p>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="commentaire" role="tabpanel"
+                        aria-labelledby="commentaire-tab">
+                        <form ng-submit="addComment(null)" name="mainCommentForm">
+                            <textarea ng-model="newComment.commentaire" required ng-minlength="2" class="form-control"
+                                placeholder="Ecrivez ici pour répondre" summernote id="group" rows="7"></textarea>
+                            <button type="submit" ng-disabled="mainCommentForm.$invalid"
+                                class="btn btn-primary float-right mt-3">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <h5><b>Les détails de votre réclamation</b></h5>
+                    <hr>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Email
+                            <a href="mailto:{{ comment.comment.reclamation.email }}">
+                                <span class="badge bg-primary text-white rounded-pill">
+                                    {{ comment.comment.reclamation.email }}</span>
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Téléphone
+                            <a href="tel:{{ comment.comment.reclamation.telephone }}">
+                                <span class="badge bg-primary text-white rounded-pill"
+                                    ng-if="comment.comment.reclamation.telephone">
+                                    {{ comment.comment.reclamation.telephone }}
+                                </span>
+                            </a>
+                            <span class="badge bg-info" ng-if="!comment.comment.reclamation.telephone">
+                                Non renseigné
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Identifiant
+                            <span class="badge bg-primary text-white rounded-pill">
+                                {{ comment.comment.reclamation.identifiant }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12 mt-3">
+                    <h5><b>Description de la réclamation</b></h5>
+                    <hr>
+                    <p ng-bind-html="comment.reclamation.description"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <h5><b>Les détails de tous les notifications</b></h5>
+            <hr>
+            <div class="container">
+                <div class="p-1 card " ng-repeat="comment in comment.subs">
+                    <div ng-if="comment.user_id">
+                        <span class="d-flex flex-row d-flex">
+                            <img align-items-center ng-src="{{ comment.user.photo_full_path }}"
+                            class="profile-photo-sm">
+                                <small style="margin-left: 15px;"><b>{{ comment.user.name }}</b> -
+                                {{ comment.created_at| date: 'dd/MM/yyyy, HH:mm' }}<br>
+                            <span> <i class="fa fa-star text-primary"></i><i class="fa fa-star text-primary"></i>
+                                <i class="fa fa-star text-primary"></i></span></small>
+                        </span>
+                        <p ng-bind-html="comment.commentaire">{{ comment.commentaire }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>

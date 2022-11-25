@@ -1,0 +1,133 @@
+<div class="card">
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Nouvelle réclamation</li>
+            </ol>
+        </nav>
+        <hr>
+    </div>
+</div>
+<div class="row mb-5">
+    <div class="col-12">
+        <p class="lead">
+            Quel est votre profil à l'Université Iba Der THIAM de Thiès ?
+        </p>
+    </div>
+    <div class="col-md-4" ng-repeat="profil in profils track by profil.id">
+        <div class="card border bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">{{ profil.code }}</h5>
+                <p class="card-text">{{ profil.nom }}</p>
+                <a ng-if="selectedProfil.id!=profil.id" ng-click="selectProfil(profil)" class="btn btn-white">Sélectionner</a>
+                <a ng-if="selectedProfil.id==profil.id" class="btn btn-dark">Sélectionné <i
+                        class="fas fa-check-double fa-sm fa-fw"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="selectedProfil.applications.length">
+        <div class="col-12">
+            <hr>
+        </div>
+        <div class="col-12">
+            <p class="lead">
+                Votre réclamation porte sur quelle application ?
+            </p>
+        </div>
+        <div class="col-12" ng-repeat="application in selectedProfil.applications track by application.id">
+            <div class="card border">
+                <div class="card-body d-flex justify-content-between">
+                    {{application.nom}}
+                    <button ng-if="selectedApplication.id!=application.id" ng-click="selectApplication(application)" type="button" class="btn btn-sm btn-primary m-0">Choisir</button>
+                    <a ng-if="selectedApplication.id==application.id" class="btn btn-dark">Sélectionné <i
+                            class="fas fa-check-double fa-sm fa-fw"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="selectedApplication.categorie_reclamations.length">
+        <div class="col-12">
+            <hr>
+        </div>
+        <div class="col-12">
+            <p class="lead">
+                Renseigner les détails de la réclamation...
+            </p>
+        </div>
+        <div class="col-12">
+            <div class="card border">
+                <form ng-submit="store()">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="identifiant" class="form-label">{{ selectedProfil.code=='ETU'?'INE ou Numéro carte étudiant':'Matricule' }}</label>
+                                    <input type="text" ng-model="newReclamation.identifiant" class="form-control" name="identifiant" id="identifiant" aria-describedby="identifiantHelpId" placeholder="">
+                                    <small id="identifiantHelpId" class="form-text text-muted">Saisir votre
+                                        identifiant</small><br>
+                                    <small ng-repeat-start="error in  creationErrors.identifiant" class="text-danger fw-normal">- {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categorie_reclamation_id" class="form-label">Selectionner
+                                        l'objet</label>
+                                    <select ng-change="selectCategorieReclamation($event)" ui-select2 ng-model="newReclamation.categorie_reclamation_id" class="form-control" name="categorie_reclamation_id" id="categorie_reclamation_id">
+                                        <option ng-value="">Sélectionner l'objet de la réclamation</option>
+                                        <option
+                                            ng-repeat="categorieReclamation in selectedApplication.categorie_reclamations track by categorieReclamation.id"
+                                            ng-value="categorieReclamation.id">{{categorieReclamation.nom}}</option>
+                                    </select>
+                                    <small ng-repeat-start="error in  creationErrors.categorie_reclamation_id" class="text-danger fw-normal">- {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="mb-3" ng-show="selectedCategorieReclamation.nom=='Autre'">
+                                    <label for="objet" class="form-label">Objet réclamation *</label>
+                                    <input ng-model="newReclamation.objet" type="text" class="form-control h-100" name="objet" id="objet" aria-describedby="objetHelpId" placeholder="Préciser l'objet de la réclamation">
+                                    <small id="objetHelpId" class="form-text text-muted">Saisir l'objet de la
+                                        réclamation</small> <br>
+                                    <small ng-repeat-start="error in  creationErrors.objet" class="text-danger fw-normal">- {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label b">Indications</label>
+                                    <div class="card">
+                                      <div class="card-body">
+                                        <blockquote class="blockquote mb-0">
+                                          <p ng-bind-html="selectedCategorieReclamation.guide"></p>
+                                        </blockquote>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description *</label>
+                                    <textarea ng-model="newReclamation.description" summernote class="form-control" name="description" id="description" rows="5"></textarea>
+                                    <small ng-repeat-start="error in  creationErrors.description" class="text-danger fw-normal">- {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input ng-model="newReclamation.email" type="email" class="form-control" name="email" id="email" aria-describedby="emailHelpId" placeholder="Email">
+                                    <small id="emailHelpId" class="form-text text-muted">Preciser une adresse email valide et joignable pour suivre la réclamation.</small> <br>
+                                    <small ng-repeat-start="error in  creationErrors.email" class="text-danger fw-normal">- {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="telephone" class="form-label">Téléphone</label>
+                                    <input ng-model="newReclamation.telephone" type="tel" class="form-control" name="telephone" id="telephone" aria-describedby="telephoneHelpId" placeholder="Téléphone">
+                                    <small id="telephoneHelpId" class="form-text text-muted">Préciser votre numéro pour
+                                        vous rappeler au besoin</small><br>
+                                    <small ng-repeat-start="error in  creationErrors.telephone" class="text-danger fw-normal">- {{error}}</small>
+                                    <br ng-repeat-end="">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary float-right">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

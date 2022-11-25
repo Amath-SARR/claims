@@ -1,0 +1,184 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+    body {
+        background-color: #F8F7F2;
+    }
+
+    .d-flex a {
+        text-decoration: none;
+        color: #686868
+    }
+
+    p {
+        margin: 0px;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover
+    }
+</style>
+<div class="container mb-5">
+    <div class="row mt-2 bg-white">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                            <li class="breadcrumb-item"><a href="#!/user">Liste des utilisateurs</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ user.name }}</li>
+                        </ol>
+                    </nav>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-12 bg-white p-0 px-3 py-3 mb-3">
+                    <input id="photoInputEdit" hidden accept="image/*" type="file" name="photo">
+                    <div class="d-flex flex-column align-items-center border py-2">
+                        <img ng-click="selectPhotoEdit()" class="photo" ng-src="{{ user.photo_full_path }}" alt="">
+                        <p class="fw-bold h4 mt-3">{{ user.name }}</p>
+                        <p class="text-muted">{{user.poste}}</p>
+                        <p class="text-muted mb-3">{{ user.type }}</p>
+                        <div class="d-flex ">
+                            <div ng-click="show()" class="btn btn-outline-secondary me-2">
+                                <i class="fas fa-sync-alt fa-sm fa-fw"></i>
+                            </div>
+                            <div ng-if="currentUser.is_admin" class="btn-group-vertical">
+                                <div class="btn btn-danger follow me-2" data-bs-toggle="modal"
+                                    data-bs-target="#passwordEditModal">Changer mot de passe
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7 ps-md-4">
+            <div class="row">
+                <div class="col-12 bg-white px-3 mb-3 pb-3">
+                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                        <p class="py-2">Nom complet</p>
+                        <p class="py-2 text-muted">{{ user.name }}</p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                        <p class="py-2">Email</p>
+                        <p class="py-2 text-muted">
+                            <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                        </p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                        <p class="py-2">Poste</p>
+                        <p class="py-2 text-muted">{{ user.poste }}</p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                        <p class="py-2">Type</p>
+                        <p class="py-2 text-muted">
+                            <span class="badge bg-primary">{{ user.type }}</span>
+                        </p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                        <p class="py-2">Etat</p>
+                        <p class="py-2 text-muted">
+                            <span class="badge text-dark"
+                                ng-class="{'badge-success':user.enabled,'badge-danger':!user.enabled}">{{
+                                user.enabled?'Active':'Inactive' }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 bg-white px-3 pb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Applications et catégories réclamations</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item"
+                                    ng-repeat="intervenant in user.intervenants track by intervenant.id">
+                                    <div class="row">
+                                        <div class="col-12  d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">APP</span> - {{intervenant.application.nom}}
+                                            <button ng-if="currentUser.is_admin" ng-click="destroyIntervenant(intervenant)" type="button"
+                                                class="btn btn-danger">
+                                                <i class="fas fa-trash-alt fa-sm fa-fw"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-12">
+                                            <ul class="list-group">
+                                                <li ng-repeat="gestionnaire in user.gestionnaires track by gestionnaire.id"
+                                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                                    ng-show="gestionnaire.categorie_reclamation.application_id==intervenant.application_id">
+                                                    {{gestionnaire.categorie_reclamation.nom}}
+                                                    <span ng-if="currentUser.is_admin" ng-click="destroyGestionnaire(gestionnaire)"
+                                                        class="badge bg-danger rounded-pill">
+                                                        <i class="fas fa-trash-alt fa-sm fa-fw"></i>
+                                                    </span>
+                                                </li>
+                                                <li class="list-group-item"
+                                                    ng-repeat="categorieReclamation in intervenant.application.categorie_reclamations track by categorieReclamation.id"
+                                                    ng-show="(!((user.gestionnaires|map:'categorie_reclamation_id')|contains:categorieReclamation.id) && currentUser.is_admin)">
+                                                    <a style="border-radius: 20%;"
+                                                        ng-click="addNewGestionnaire(categorieReclamation)"> <i
+                                                            class="fas fa-plus-square fa-fw" aria-hidden="true"
+                                                            style="color: #92a46e;"></i></a>&nbsp;{{categorieReclamation.nom}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li ng-click="addIntervenant(application)"
+                                    ng-repeat="application in applications track by application.id"
+                                    class="list-group-item"
+                                    ng-hide="((user.intervenants|map:'application_id')|contains:application.id) || !currentUser.is_admin">
+                                    <a style="border-radius: 20%;"> <i class="fas fa-plus-square fa-fw"
+                                            aria-hidden="true"
+                                            style="border-radius: 20%; color: #92a46e;"></i></a>&nbsp;APP -
+                                    {{application.nom}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="passwordEditModal" tabindex="-1" aria-labelledby="ModalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="ModalTitleId">Attribuer un nouveau mot de passe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form name="editPassword" ng-submit="attributeNewPassword(newPassword)">
+                    <div class="modal-body">
+                        <input  autocomplete="off" ng-model="newPassword"
+                            ng-class="{'is-invalid':newPassword.length!=0 && editPassword.newPassword.$invalid, 'is-valid':editPassword.newPassword.$valid}"
+                            class="
+                            form-control" placeholder="Saisissez nouveau mot de passe" name="newPassword"
+                            type="password" ng-required="true" ng-minlength="6">
+                        <small ng-if="newPassword.length!=0 && editPassword.newPassword.$invalid"
+                            class="text-danger">Veuillez
+                            saisir au moins 6 caractères</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" style="margin: 0;" ng-disabled="editPassword.newPassword.$invalid"
+                            class="btn btn-primary btn-block">Valider</button>
+                        <ng-container ng-if="isAttributingNewPassord">
+                            <div class="spinner-border" style="color: #92a46e;" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

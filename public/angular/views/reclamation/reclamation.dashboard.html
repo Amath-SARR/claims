@@ -1,0 +1,762 @@
+<style>
+    .scroll-photo {
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+    .stretch-card>.card {
+        width: 100%;
+        min-width: 100%
+    }
+
+    .flex {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto
+    }
+
+    @media (max-width:991.98px) {
+        .padding {
+            padding: 1.5rem
+        }
+    }
+
+    @media (max-width:767.98px) {
+        .padding {
+            padding: 1rem
+        }
+    }
+
+    .padding {
+        padding: 3rem !important
+    }
+
+    .card-box {
+        padding: 20px;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        background-color: #fff;
+    }
+
+    .project-box {
+        position: relative
+    }
+
+    .project-box .badge {
+        position: absolute;
+        right: 20px
+    }
+
+    .project-box h4 {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+        overflow: hidden
+    }
+
+    .project-box ul li {
+        padding-right: 30px
+    }
+
+    .project-box .assign-member div {
+        margin: 0 0 10px -12px;
+        display: inline-block;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02);
+        box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02)
+    }
+
+    .project-box .assign-member div:first-of-type {
+        margin-left: 0
+    }
+
+    .thumb-sm {
+        height: 30px;
+        width: 30px;
+    }
+
+    .font-13 {
+        font-size: 13px !important;
+    }
+
+    .objet-style {
+        color: #313a46 !important;
+        margin-top: 1.33em;
+        margin-bottom: 1.33em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .sortable-moves {
+        cursor: move;
+        margin-bottom: 0;
+        -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        margin-bottom: 20px;
+        padding: 15px 0 15px 60px
+    }
+
+    .sortable-moves {
+        font-size: 14px;
+        line-height: 1.55556em;
+        list-style-type: none;
+        margin-bottom: 15px;
+        min-height: 3.55556em;
+        padding-left: 5.11111em;
+        position: relative;
+        cursor: move;
+        background-color: #fff
+    }
+
+    .sortable-moves #headerImg {
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        left: 10px;
+        border-radius: 5px;
+        top: 15px
+    }
+
+    .float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 70px;
+        right: 40px;
+        background-color: #92a46e;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        box-shadow: 2px 2px 3px #999;
+    }
+
+    .my-float {
+        margin-top: 22px;
+    }
+
+    .ml--1 {
+        margin-left: -10px;
+    }
+    /*==================================================
+  Comment Contents CSS
+  ==================================================*/
+
+    .post-content {
+        background: #f8f8f8;
+        border-radius: 4px;
+        width: 100%;
+        border: 1px solid #f1f2f2;
+        margin-bottom: 20px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .post-content img.post-image,
+    video.post-video,
+    .google-maps {
+        width: 100%;
+        height: auto;
+    }
+
+    .post-content .google-maps .map {
+        height: 300px;
+    }
+
+    .post-content .post-container {
+        padding: 20px;
+    }
+
+    .post-content .post-container .post-detail {
+        margin-left: 65px;
+        position: relative;
+    }
+
+    .post-content .post-container .post-detail .post-text {
+        line-height: 24px;
+        margin: 0;
+    }
+
+    .post-content .post-container .post-detail .reaction {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .post-content .post-container .post-detail .post-comment {
+        display: inline-flex;
+        margin: 10px auto;
+        width: 100%;
+    }
+
+    .post-content .post-container .post-detail .post-comment img.profile-photo-sm {
+        margin-right: 10px;
+    }
+
+    .post-content .post-container .post-detail .post-comment .form-control {
+        height: 30px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        margin: 7px 0;
+        min-width: 0;
+    }
+
+    img.profile-photo-md {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    img.profile-photo-sm {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+    }
+
+    .text-green {
+        color: #8dc63f;
+    }
+
+    .text-red {
+        color: #ef4136;
+    }
+
+    .following {
+        color: #8dc63f;
+        font-size: 12px;
+        margin-left: 20px;
+    }
+
+    .disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+    /*==================================================
+  History Contents CSS
+  ==================================================*/
+
+    .panel-order .row {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .panel-order .row:last-child {
+        border: 0px;
+    }
+
+    .panel-order .row .col-md-1 {
+        text-align: center;
+        padding-top: 15px;
+    }
+
+    .panel-order .row .col-md-1 img {
+        width: 50px;
+        max-height: 50px;
+    }
+
+    .panel-order .row .row {
+        border-bottom: 0;
+    }
+
+    .panel-order .row .col-md-11 {
+        border-left: 1px solid #ccc;
+    }
+
+    .panel-order .row .row .col-md-12 {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .panel-order .row .row .col-md-12:last-child {
+        font-size: 11px;
+        color: #555;
+        background: #efefef;
+    }
+
+    .panel-order .btn-group {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .panel-order .panel-body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .panel-order .panel-deading {
+        margin-bottom: 0;
+    }
+</style>
+<div class="container-fluid py-1">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body pb-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-white p-2">
+                            <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tableau des réclamations</li>
+                        </ol>
+                    </nav>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-12 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="fas fa-search fa-sm fa-fw"></i>
+                                </span>
+                                <input ng-model="searchField" type="text" class="form-control" placeholder="Rechercher" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 pl-1 scroll-photo mb-3">
+                            <img ng-init="user.selected=false" ng-repeat="user in users" style="width: 50px; cursor: pointer;" ng-src="{{user.photo_full_path}}" class="rounded-circle d-inline ml--1" ng-class="{'border border-primary border-3': user.selected}" alt="{{user.name}}"
+                                title="{{user.name}}" ng-click="selectUserForFilter(user)">
+                            <div ng-class="{'border-primary border-3': viewOnlyMines}" class="card d-inline-block border mr-5">
+                                <div class="card-body py-0">
+                                    <a ng-click="viewOnlyMyReclamations()">Uniquement mes réclamations</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12 mb-3">
+                            <div class="">
+                                <select ng-change="handleAppliationSelection()" ng-model="selectedApplicationId" class="form-control form-control-sm" name="application_id" id="application_id">
+                                    <option ng-value="0">Toutes les applications</option>
+                                    <option ng-repeat="application in currentUserApplications track by application.id"
+                                        ng-value="application.id">{{ application.nom }}</option>
+                                    <option></option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3" style="overflow-x: auto;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body ">
+                    <div class="row border py-2">
+                        <div class="col-3" ng-repeat="list in data">
+                            <!-- Draggable Multiple List card start -->
+                            <div class="card border">
+                                <div class="card-header">
+                                    <h5 class="card-header-text">{{ list.state.nom }} <small class="text-primary">
+                                        {{list.reclamations.length}}</small>
+                                    </h5>
+                                </div>
+                                <div class="card-block p-b-0" style="background-color: #e0e4d8;">
+                                    <div class="row" style="height: 720px; overflow-y: auto;">
+                                        <div class="col-md-12 py-1" dnd-list="list.reclamations" dnd-inserted="moveToState(list.state,item)">
+                                            <div class="card-box pb-0 project-box sortable-moves" ng-repeat="reclamation in list.reclamations|filter:searchField" dnd-draggable="reclamation" dnd-effect-allowed="move" dnd-selected="selectReclamation(reclamation)" dnd-moved="list.reclamations.splice($index, 1)">
+                                                <div class="assign-member">
+                                                    <label class="mt-0 mb-3 objet-style">
+                                                        {{ reclamation.application_nom }}
+                                                    </label>
+                                                    <div data-toggle="tooltip" data-placement="top" title="{{ reclamation.application_code }}">
+                                                        <img id="headerImg" ng-src="{{reclamation.application_logo_full_path}}" class="rounded-circle thumb-sm" alt="friend">
+                                                    </div> <br>
+                                                    <span> <strong>{{ reclamation.number }}</strong> - {{ reclamation.objet|truncate:65:'...':true }}</span>
+                                                </div>
+                                                <!-- <p class="text-muted font-13"
+                                                    ng-bind-html="reclamation.description|truncate:70:'...':true"></p> -->
+                                                <ul class="list-inline mb-0">
+                                                    <li class="list-inline-item">
+                                                        <p>Priorité</p>
+                                                        <strong class="mb-0">
+                                                            <i
+                                                                class="{{ reclamation.priorite_icone+' '+reclamation.priorite_class }}"></i>
+                                                            {{ reclamation.priorite_nom }}
+                                                        </strong>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <img ng-if="!reclamation.user_name" title="Non assignée" src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png" class="rounded-circle thumb-sm" alt="friend">
+                                                        <img ng-if="reclamation.user_name" title="{{ reclamation.user_name }}" src="{{ reclamation.user_photo_full_path }}" class="rounded-circle thumb-sm" alt="friend">
+                                                    </li>
+                                                </ul>
+                                                <!-- /.progress .no-rounded -->
+                                            </div>
+                                            <div class="card border" ng-if="list.reclamations.length==0" dnd-draggable dnd-disable-if="true">
+                                                <div class="card-body">
+                                                    <p class="card-text">Cette liste est vide.</p>
+                                                </div>
+                                            </div>
+                                            <div class="card dndPlaceholder">
+                                                <div class="card-body bg-primary">
+                                                    <p class="card-text">Déposer ici...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Draggable Multiple List card end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row w-100">
+                    <div class="col-9">
+                        {{ selectedReclamation.number }} - {{selectedReclamation.objet}}
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn-close float-right" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row border p-2">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5><b>Contacts du réclameur</b></h5>
+                                    <hr>
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Email
+                                            <a href="mailto:{{ selectedReclamation.email }}">
+                                                <span class="badge bg-primary text-white rounded-pill">
+                                                    {{selectedReclamation.email }}</span>
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Téléphone
+                                            <a href="tel:{{ selectedReclamation.telephone }}">
+                                                <span class="badge bg-primary text-white rounded-pill" ng-if="selectedReclamation.telephone">
+                                                    {{selectedReclamation.telephone }}
+                                                </span>
+                                            </a>
+                                            <span class="badge bg-info" ng-if="!selectedReclamation.telephone">
+                                                Non renseigné
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Identifiant
+                                            <span class="badge bg-primary text-white rounded-pill">
+                                                {{selectedReclamation.identifiant }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <h5><b>Description de la réclamation</b></h5>
+                                    <hr>
+                                    <p ng-bind-html="selectedReclamation.description"></p>
+                                </div>
+
+                                <div class="col-12 mt-3">
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="commentaire-tab" data-bs-toggle="tab" data-bs-target="#commentaire" type="button" role="tab" aria-controls="commentaire" aria-selected="true"><b>Commentaires</b></button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="historique-tab" data-bs-toggle="tab" data-bs-target="#historique" type="button" role="tab" aria-controls="historique" aria-selected="false"><b>Historique</b></button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="commentaire" role="tabpanel" aria-labelledby="commentaire-tab">
+                                            <form ng-submit="addComment(null)" name="mainCommentForm">
+                                                <textarea ng-model="newComment.commentaire" required ng-minlength="2" class="form-control" placeholder="Ajouter un commentaire" summernote id="group" rows="7"></textarea>
+                                                <span style="color: #ef4136;"> Cochez là pour répondre ou notifier au réclameur</span> <input type="checkbox" ng-model="newComment.forReclameur" ng-click="sendMailReclameur()">
+                                                <button type="submit" ng-disabled="mainCommentForm.$invalid" class="btn btn-primary float-right mt-3">Envoyer</button>
+                                            </form>
+                                            <div class="post-content" ng-repeat="comment in selectedReclamation.comments track by comment.id">
+                                                <div class="post-container d-flex" >
+                                                    <img ng-src="{{ comment.user.photo_full_path }}" alt="{{ comment.user.name }}" class="profile-photo-md pull-left">
+                                                    <div class="post-detail" style="margin-left: 3px;">
+                                                        <div class="user-info">
+                                                            <h6>
+                                                                <span class="profile-link">
+                                                                {{comment.user.name}}</span>
+                                                                <span class="badge bg-primary">{{ comment.user.poste }}</span>
+                                                                <span ng-if="comment.for_reclameur" class="badge bg-primary">Réclameur</span>
+                                                            </h6>
+                                                            <p class="text-muted">Posté le {{ comment.created_at|date:'dd/MM/yy à HH:mm' }}</p>
+                                                        </div>
+                                                        <div class="line-divider"></div>
+                                                        <div class="post-text">
+                                                            <p>
+                                                                <div ng-bind-html="comment.commentaire"></div>
+                                                                <i class="em em-anguished"></i> <i class="em em-anguished"></i> <i class="em em-anguished"></i></p>
+                                                        </div>
+                                                        <div>
+                                                            <a class="text-danger" ng-click="removeComment(comment)"><strong>Supprimer</strong></a>
+                                                            <a ng-click="comment.respond=true"><strong>Répondre</strong></a>
+                                                        </div>
+                                                        <div class="line-divider"></div>
+                                                        <div class="post-comment" ng-repeat="subcomment in comment.subs track by subcomment.id">
+                                                            <img ng-if="subcomment.user.photo_full_path" ng-src="{{subcomment.user.photo_full_path}}" alt="{{ subcomment.user.name }}" class="profile-photo-sm">
+                                                            <img ng-if="!subcomment.user.photo_full_path"
+                                                            src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"
+                                                            class="profile-photo-sm" alt="Réclameur">
+                                                            <div>
+                                                                <a ng-if="!subcomment.user.name" href="mailto:{{ reclamation.email }}" class="profile-link">
+                                                                   {{ selectedReclamation.email }}
+                                                                </a>
+                                                                <a href="" class="profile-link">
+                                                                    {{ subcomment.user.name }}
+                                                                </a> - {{ subcomment.created_at|date:'dd/MM/yy à HH:mm' }}
+                                                                <i class="em em-laughing"></i>
+                                                                <br>
+                                                                <p ng-bind-html="subcomment.commentaire"></p>
+                                                                <a class="text-danger" ng-click="removeComment(subcomment)"><strong>Supprimer</strong></a>
+                                                            </div>
+                                                        </div>
+                                                        <form ng-show="comment.respond" class="d-inline-block" ng-submit="addComment(comment)">
+                                                            <div class="post-comment">
+                                                                <img ng-src="{{currentUser.photo_full_path}}" alt="Moi" class="profile-photo-sm">
+                                                                <input ng-model="answerComment.commentaire" type="text" class="form-control" placeholder="Répondre au commentaire">
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="historique" role="tabpanel" aria-labelledby="historique-tab">
+                                            <div class="container bootdey">
+                                                <div class="panel panel-default panel-order">
+
+                                                    <div class="panel-body">
+                                                        <div class="row" ng-if="selectedReclamation.reclamation_states.length == 0">
+                                                            <div class="col">
+                                                                Aucune historique
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" ng-repeat="historicReclamationState in selectedReclamation.reclamation_states">
+                                                            <div class="col-md-1"><img ng-src="{{historicReclamationState.user.photo_full_path}}" class="media-object img-fluid" /></div>
+                                                            <div class="col-md-11">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="pull-right"><label class="label label-danger {{historicReclamationState.state.class}}">{{historicReclamationState.state.nom}}</label></div>
+                                                                        <span><strong>{{historicReclamationState.user.name}}</strong></span><br />a modifié l'état le {{historicReclamationState.created_at | date: 'dd/MM/yyyy, HH:mm'}}<br />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                            <select ng-show="editSelectedStateEnabled" ng-change="updateSelectedReclamation()" ng-model="selectedReclamation.state_id" class="form-control" name="state_edit_id" id="state_edit_id">
+                                <option ng-repeat="state in states" ng-value="state.id">
+                                    {{state.nom}}</option>
+                            </select>
+                            <div ng-click="enableSelectedStateEdit()">
+                                <select ng-disabled="!editSelectedStateEnabled" ng-show="!editSelectedStateEnabled" class="form-control" name="state_edit_id" id="state_edit_id">
+                                    <option>
+                                        {{selectedReclamation.state.nom}}</option>
+                                </select>
+                            </div>
+                            <ul class="list-group mt-2">
+                                <li class="list-group-item">
+                                    <strong>Détails</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <div ng-show="!editSelectedResponsableEnabled" ng-click="enableSelectedResponsableEdit()" class="w-100 d-flex justify-content-between align-items-center">
+                                        Responsable
+                                        <span class="badge bg-info" ng-if="!selectedReclamation.user">Non assigné</span>
+                                        <div class="nowrap" ng-if="selectedReclamation.user">
+                                            <img title="{{ selectedReclamation.user.name }}" ng-src="{{ selectedReclamation.user.photo_full_path }}" class="rounded-circle thumb-sm d-inline" alt="friend"> <span ng-click="getResponsablesSelectedReclamtion(selectedReclamation)"
+                                                class="badge bg-primary rounded-pill">{{selectedReclamation.user.name}}</span>
+                                        </div>
+                                    </div>
+                                    <select ng-change="updateSelectedReclamation()" ng-model="selectedReclamation.user_id" ng-show="editSelectedResponsableEnabled" class="form-control" name="user_edit_id" id="user_edit_id">
+                                        <option
+                                            ng-repeat="selectedReclamationResponsable in selectedReclamationResponsables"
+                                            ng-value="selectedReclamationResponsable.id">
+                                            {{selectedReclamationResponsable.name}}</option>
+                                        <option ng-value="null">Non assigné</option>
+                                    </select>
+                                    <a style="color: blue;" class="float-end mt-2"
+                                    ng-click="updateSelectedReclamation(currentUser.id)"
+                                    ng-if="!selectedReclamation.user"> Me l'assigner </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <div ng-click="enableSelectedPrioriteEdit()" ng-show="!editSelectedPrioriteEnabled" class=" d-flex justify-content-between align-items-center">
+                                        Priorité
+                                        <span class="rounded-pill">
+                                            <!-- <i class="{{ selectedReclamation.priorite.icone+' '+selectedReclamation.priorite.class }}"></i> -->
+                                            <ng-container ng-if="selectedReclamation.priorite.code == 'HIGH'">
+                                                <i
+                                                    class="{{ selectedReclamation.priorite.icone+' '+selectedReclamation.priorite.class }}">
+                                                </i>
+                                            </ng-container>
+                                            <ng-container ng-if="selectedReclamation.priorite.code == 'MEDIUM'">
+                                                <i
+                                                    class="{{ selectedReclamation.priorite.icone+' '+selectedReclamation.priorite.class }}">
+                                                </i>
+                                            </ng-container>
+                                            <ng-container ng-if="selectedReclamation.priorite.code == 'LOW'">
+                                                <i
+                                                    class="{{ selectedReclamation.priorite.icone+' '+selectedReclamation.priorite.class }}">
+                                                </i>
+                                            </ng-container>
+                                            {{ selectedReclamation.priorite.nom }}
+                                        </span>
+                                    </div>
+                                    <select ng-change="updateSelectedReclamation()" ng-model="selectedReclamation.priorite_id" ng-show="editSelectedPrioriteEnabled" class="form-control" name="priorite_edit_id" id="priorite_edit_id">
+                                        <option ng-repeat="priorite in priorites" ng-value="priorite.id">
+                                            {{ priorite.nom }}
+                                        </option>
+                                    </select>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Application
+                                    <span title="{{ selectedReclamation.categorie_reclamation.application.nom }}" class="badge bg-primary rounded-pill">
+                                        {{ selectedReclamation.categorie_reclamation.application.code }}
+                                    </span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a ng-if="!selectedReclamation.archivee" ng-click="archiverReclamation(selectedReclamation)" class="mx-auto d-block">Archiver</a>
+                                    <a ng-if="selectedReclamation.archivee" class="disabled mx-auto d-block">Archivée <i class="fa fa-archive" aria-hidden="true"></i></a>
+                                </li>
+                                <ng-container ng-if="currentUser.is_admin">
+                                    <li class="list-group-item d-flex justify-content-center align-items-center">
+                                        <button ng-click="destroy(selectedReclamation)" class="btn btn-md btn-danger">
+                                            <i class="fa fa-trash pr-5" aria-hidden="true"></i>
+                                        <span class="m-1">Supprimer</span>
+                                        </button>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer>
+    <a class="float" data-bs-toggle="modal" data-bs-target="#reclamationNewModalDashboard">
+        <i class="fa fa-plus my-float"></i>
+    </a>
+</footer>
+
+<!-- Modal New Reclamation-->
+<div class="modal fade bd-example-modal-lg" id="reclamationNewModalDashboard" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Nouvelle Réclamation</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form ng-submit="store()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nom" class="form-label">Application *</label>
+                                <select ng-model="application" class="form-control" name="application" id="application" ng-change="selectApplication(application)">
+                                    <option ng-repeat="connectedUserApplication in connectedUserApplications"
+                                        ng-value="connectedUserApplication">{{
+                                        connectedUserApplication.nom }}</option>
+                                </select>
+                                <small id="telephoneHelpId" class="form-text text-muted">Cliquer pour séléctionner
+                                    l'application</small><br>
+                                <small ng-repeat-start="error in  creationErrors.application" id="applicationHelpId" class="text-danger fw-normal">- {{error}}</small>
+                                <br ng-repeat-end="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="categorie_reclamation_id" class="form-label">Catégorie de la réclamation *</label>
+                                <select ng-change="selectCategorieReclamation($event)" ui-select2 ng-model="newReclamation.categorie_reclamation_id" class="form-control" name="categorie_reclamation_id" id="categorie_reclamation_id">
+                                    <option ng-if="categorieReclamation.application_id==selectedApplication.id" ng-repeat="categorieReclamation in categoriesReclamations"
+                                        ng-value="categorieReclamation.id" >{{categorieReclamation.nom}}</option>
+                                </select>
+                                <small ng-repeat-start="error in  creationErrors.categorie_reclamation_id" class="text-danger fw-normal">- {{error}}</small>
+                                <br ng-repeat-end="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3" ng-show="selectedCategorieReclamation.nom=='Autre'">
+                        <label for="objet" class="form-label">Objet réclamation *</label>
+                        <input ng-model="newReclamation.objet" type="text" class="form-control h-100" name="objet" id="objet" aria-describedby="objetHelpId" placeholder="Préciser l'objet de la réclamation">
+                        <small id="objetHelpId" class="form-text text-muted">Saisir l'objet de la
+                            réclamation</small> <br>
+                        <small ng-repeat-start="error in  creationErrors.objet" class="text-danger fw-normal">-
+                            {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="identifiant" class="form-label">Matricule *</label>
+                        <input type="text" ng-model="newReclamation.identifiant" class="form-control" name="identifiant" id="identifiant" aria-describedby="identifiantHelpId" placeholder="Matricule">
+                        <small id="identifiantHelpId" class="form-text text-muted">Saisir votre
+                            identifiant</small><br>
+                        <small ng-repeat-start="error in  creationErrors.identifiant" class="text-danger fw-normal">-
+                            {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description *</label>
+                        <textarea ng-model="newReclamation.description" summernote class="form-control" name="description" id="description" rows="5"></textarea>
+                        <small ng-repeat-start="error in  creationErrors.description" class="text-danger fw-normal">-
+                            {{error}}</small>
+                        <br ng-repeat-end="">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email *</label>
+                                <input ng-model="newReclamation.email" type="email" class="form-control" name="email" id="email" aria-describedby="emailHelpId" placeholder="Email">
+                                <small id="emailHelpId" class="form-text text-muted">Préciser une adresse email valide et joignable pour suivre la réclamation.
+                                </small> <br>
+                                <small ng-repeat-start="error in  creationErrors.email" class="text-danger fw-normal">-
+                                    {{error}}</small>
+                                <br ng-repeat-end="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="telephone" class="form-label">Téléphone</label>
+                                <input ng-model="newReclamation.telephone" type="tel" class="form-control" name="telephone" id="telephone" aria-describedby="telephoneHelpId" placeholder="Téléphone">
+                                <small id="telephoneHelpId" class="form-text text-muted">Préciser votre numéro pour
+                                    vous rappeler au besoin</small><br>
+                                <small ng-repeat-start="error in  creationErrors.telephone" class="text-danger fw-normal">-
+                                    {{error}}</small>
+                                <br ng-repeat-end="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
